@@ -1,5 +1,5 @@
 name: Bug
-description: Bug report (MVP Factory standard)
+description: Bug report (SentinelSquad standard)
 title: "[Bug] "
 labels: ["type:bug"]
 body:

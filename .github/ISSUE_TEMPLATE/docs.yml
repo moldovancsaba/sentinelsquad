@@ -1,5 +1,5 @@
 name: Docs
-description: Documentation change (MVP Factory standard)
+description: Documentation change (SentinelSquad standard)
 title: "[Docs] "
 labels: ["type:docs"]
 body:
@@ -7,7 +7,7 @@ body:
     id: product
     attributes:
       label: Product
-      placeholder: "MVP Factory Control"
+      placeholder: "SentinelSquad Control"
     validations:
       required: true
 

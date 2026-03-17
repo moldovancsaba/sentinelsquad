@@ -1,5 +1,5 @@
 name: Release
-description: Release planning and execution (MVP Factory standard)
+description: Release planning and execution (SentinelSquad standard)
 title: "[Release] "
 labels: ["type:release"]
 body:

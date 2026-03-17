@@ -1,4 +1,4 @@
-# When a new issue is opened in this repo, add it to the MVP Factory Board (Project 1).
+# When a new issue is opened in this repo, add it to the SentinelSquad Board (Project 1).
 # Keeps the board in sync: every issue becomes a card.
 # Requires: repo secret MVP_PROJECT_TOKEN (PAT with read:project + project scope). See docs/SYNC.md.
 

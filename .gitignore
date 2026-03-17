@@ -1,0 +1,21 @@
+.DS_Store
+
+# Node / Next.js (War Room)
+apps/sentinelsquad/node_modules/
+apps/sentinelsquad/.next/
+apps/sentinelsquad/.env
+apps/sentinelsquad/.env.*
+!apps/sentinelsquad/.env.example
+apps/sentinelsquad/.warroom/
+apps/sentinelsquad/output/
+apps/sentinelsquad/test-results/
+apps/sentinelsquad/tsconfig.tsbuildinfo
+apps/sentinelsquad/nexus/__pycache__/
+apps/sentinelsquad/scripts/nexus/__pycache__/
+
+# Prisma
+apps/sentinelsquad/prisma/dev.db
+
+# SentinelSquad runtime artifacts
+MANUAL_REQUIRED
+docker-bootstrap.log
