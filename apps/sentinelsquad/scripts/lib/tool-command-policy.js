@@ -124,7 +124,9 @@ function readCommandAccessStatus(call, entries) {
       entry.status
     ])
   );
-  const denied = commandNames.filter((command) => statusByCommand.get(command) !== "APPROVED");
+  const denied = commandNames.filter(
+    (command) => statusByCommand.has(command) && statusByCommand.get(command) !== "APPROVED"
+  );
   return { denied, commandNames };
 }
 
@@ -171,6 +173,7 @@ function enforceExplicitApprovalDeclaration(call, decision) {
 
 function classifyCall(call, commandAccessEntries) {
   const commandAccess = readCommandAccessStatus(call, commandAccessEntries);
+  const enforcesCommandAccess = call.tool === "shell.exec";
   const base = {
     callId: call.id,
     tool: call.tool,
@@ -179,7 +182,7 @@ function classifyCall(call, commandAccessEntries) {
     effectiveRiskClass: call.riskClass,
     requiresApproval: call.approval === "HUMAN_APPROVAL"
   };
-  if (commandAccess.denied.length) {
+  if (enforcesCommandAccess && commandAccess.denied.length) {
     return {
       ...base,
       policyClass: call.tool === "shell.exec" ? "SHELL_EXECUTION" : "UNKNOWN_TOOL",

@@ -111,7 +111,9 @@ function readCommandAccessStatus(
   const statusByCommand = new Map(
     entries.map((entry) => [normalizeCommandName(entry.command), entry.status])
   );
-  const denied = commandNames.filter((command) => statusByCommand.get(command) !== "APPROVED");
+  const denied = commandNames.filter(
+    (command) => statusByCommand.has(command) && statusByCommand.get(command) !== "APPROVED"
+  );
   return { denied, commandNames };
 }
 
@@ -149,6 +151,7 @@ function classifyCall(
   commandAccessEntries: CommandAccessEntry[]
 ): ToolCommandPolicyDecision {
   const commandAccess = readCommandAccessStatus(call, commandAccessEntries);
+  const enforcesCommandAccess = call.tool === "shell.exec";
   const base: Omit<ToolCommandPolicyDecision, "policyClass" | "allowed" | "reason"> = {
     callId: call.id,
     tool: call.tool,
@@ -157,7 +160,7 @@ function classifyCall(
     effectiveRiskClass: call.riskClass,
     requiresApproval: call.approval === "HUMAN_APPROVAL"
   };
-  if (commandAccess.denied.length) {
+  if (enforcesCommandAccess && commandAccess.denied.length) {
     return {
       ...base,
       policyClass: call.tool === "shell.exec" ? "SHELL_EXECUTION" : denyUnknownTool(call).policyClass,
