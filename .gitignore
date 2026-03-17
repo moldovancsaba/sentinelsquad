@@ -3,6 +3,8 @@
 .vscode/
 
 # Node / Next.js (SentinelSquad)
+node_modules/
+package-lock.json.*
 apps/sentinelsquad/node_modules/
 apps/sentinelsquad/.next/
 apps/sentinelsquad/.env

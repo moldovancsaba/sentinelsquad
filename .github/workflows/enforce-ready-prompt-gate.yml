@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Ensure scripts executable
         run: chmod +x scripts/sentinelsquad-ready-gate-audit.sh scripts/sentinelsquad-validate-prompt-package.js
