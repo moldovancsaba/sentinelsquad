@@ -1,0 +1,22 @@
+{
+  "name": "sentinelsquad-repo",
+  "private": true,
+  "description": "SentinelSquad product repository",
+  "workspaces": [
+    "apps/sentinelsquad"
+  ],
+  "scripts": {
+    "install:app": "npm --prefix apps/sentinelsquad install",
+    "dev": "npm --prefix apps/sentinelsquad run dev",
+    "build": "npm --prefix apps/sentinelsquad run build",
+    "typecheck": "npm --prefix apps/sentinelsquad run typecheck",
+    "verify": "npm run typecheck && npm run build",
+    "start": "npm --prefix apps/sentinelsquad run start",
+    "worker": "npm --prefix apps/sentinelsquad run worker",
+    "prisma:generate": "npm --prefix apps/sentinelsquad run prisma:generate",
+    "prisma:migrate": "npm --prefix apps/sentinelsquad run prisma:migrate",
+    "db:up": "docker compose up -d sentinelsquad-db",
+    "db:down": "docker compose stop sentinelsquad-db",
+    "bootstrap": "npm run install:app && npm run prisma:generate"
+  }
+}

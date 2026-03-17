@@ -90,7 +90,7 @@ export async function syncNexusSeminarToSentinelSquadAction() {
 
   const controller = await resolveControllerAgentKey();
   if (!controller.key) {
-    throw new Error("No enabled controller/ALPHA runtime agent available.");
+    throw new Error("No active controller or ALPHA fallback agent is available for unified execution.");
   }
 
   const thread = await getOrCreateThread({

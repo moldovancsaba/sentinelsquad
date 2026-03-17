@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { readSentinelSquadSettings } from "@/lib/settings-store";
 import { requireSession } from "@/lib/session";
 import { listUnifiedChatAgentAvailability } from "@/lib/active-agents";
+import { AGENT_MODEL_PRESETS } from "@/lib/model-presets";
 import {
   isRuntimeRunnable,
   listRunningWorkers
@@ -723,12 +724,18 @@ export default async function AgentsPage() {
                   <label className="text-[11px] text-white/65">
                     Model
                     <input
+                      list="agent-model-presets"
                       name="agentModel"
                       defaultValue={agentConfig?.agentModel ?? ""}
-                      placeholder="gpt-4.1-nano"
+                      placeholder="Granite-4.0-H-1B"
                       className="mt-1 w-full rounded-lg border border-white/15 bg-black/30 px-2 py-1.5 text-xs text-white/90"
                     />
                   </label>
+                  <datalist id="agent-model-presets">
+                    {AGENT_MODEL_PRESETS.map((model) => (
+                      <option key={model} value={model} />
+                    ))}
+                  </datalist>
                   <label className="text-[11px] text-white/65">
                     API key env var
                     <input

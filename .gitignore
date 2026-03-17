@@ -1,12 +1,15 @@
 .DS_Store
+.idea/
+.vscode/
 
-# Node / Next.js (War Room)
+# Node / Next.js (SentinelSquad)
 apps/sentinelsquad/node_modules/
 apps/sentinelsquad/.next/
 apps/sentinelsquad/.env
 apps/sentinelsquad/.env.*
 !apps/sentinelsquad/.env.example
 apps/sentinelsquad/.warroom/
+apps/sentinelsquad/.sentinelsquad/
 apps/sentinelsquad/output/
 apps/sentinelsquad/test-results/
 apps/sentinelsquad/tsconfig.tsbuildinfo
@@ -19,3 +22,6 @@ apps/sentinelsquad/prisma/dev.db
 # SentinelSquad runtime artifacts
 MANUAL_REQUIRED
 docker-bootstrap.log
+
+# Local env and logs
+*.log

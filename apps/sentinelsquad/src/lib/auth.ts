@@ -51,8 +51,8 @@ export const authOptions: NextAuthOptions = {
 
               const user = await prisma.user.upsert({
                 where: { email },
-                update: { name: "War Room Dev" },
-                create: { email, name: "War Room Dev" }
+                update: { name: "SentinelSquad Dev" },
+                create: { email, name: "SentinelSquad Dev" }
               });
 
               return { id: user.id, email: user.email, name: user.name };

@@ -119,7 +119,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// War Room domain models
+// SentinelSquad domain models
 model Agent {
   id           String      @id @default(cuid())
   key          String      @unique

@@ -91,7 +91,7 @@ export async function bootstrapSentinelSquadProjectAction() {
       fieldName: "Product",
       optionName: "SentinelSquad",
       color: "BLUE",
-      description: "War Room control panel"
+      description: "SentinelSquad unified chat and agent control plane"
     });
   }
 
