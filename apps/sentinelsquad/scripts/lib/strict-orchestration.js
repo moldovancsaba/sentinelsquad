@@ -55,7 +55,7 @@ function controllerRequiresRestart(text) {
 
 function buildWriterExecutionCommand(sourceContent) {
   const task = normalizeText(sourceContent) || "Implement from @Drafter specification";
-  return `@Writer execute ChatDev build step now: python3 run.py --task "${task.replace(/"/g, "'")}"`;
+  return `@Writer execute the implementation build step now: python3 run.py --task "${task.replace(/"/g, "'")}"`;
 }
 
 function buildControllerValidationCommand(sourceContent) {
@@ -234,7 +234,7 @@ function enforceStrictOrchestration(params) {
         }
       ],
       notices: [
-        "Strict orchestration: @Drafter output routed only to @Writer (ChatDev build step)."
+        "Strict orchestration: @Drafter output routed only to @Writer (implementation build step)."
       ],
       strictApplied: true
     };

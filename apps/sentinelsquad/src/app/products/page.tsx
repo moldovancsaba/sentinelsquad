@@ -14,6 +14,7 @@ export default async function ProductsPage() {
   if (!session) redirect("/signin");
 
   const settings = await readSentinelSquadSettings();
+  const planningSyncEnabled = process.env.SENTINELSQUAD_ENABLE_GITHUB_BOARD === "true";
   let products: string[] = [];
   let boardItems:
     | Array<{
@@ -22,19 +23,21 @@ export default async function ProductsPage() {
       }>
     = [];
   let metaError: string | null = null;
-  try {
-    const [meta, items] = await Promise.all([
-      getProjectMeta(),
-      listProjectItems({ limit: 500 })
-    ]);
-    const productField = meta.fields.find((f) => f.name === "Product");
-    products = productField?.options?.map((o) => o.name) ?? [];
-    boardItems = items.map((it) => ({
-      issueNumber: it.issueNumber,
-      fields: it.fields
-    }));
-  } catch (e) {
-    metaError = e instanceof Error ? e.message : String(e);
+  if (planningSyncEnabled) {
+    try {
+      const [meta, items] = await Promise.all([
+        getProjectMeta(),
+        listProjectItems({ limit: 500 })
+      ]);
+      const productField = meta.fields.find((f) => f.name === "Product");
+      products = productField?.options?.map((o) => o.name) ?? [];
+      boardItems = items.map((it) => ({
+        issueNumber: it.issueNumber,
+        fields: it.fields
+      }));
+    } catch (e) {
+      metaError = e instanceof Error ? e.message : String(e);
+    }
   }
 
   const configuredRows = new Map(
@@ -122,17 +125,17 @@ export default async function ProductsPage() {
   const statusSummary = Array.from(topStatusCounts.entries()).sort((a, b) => b[1] - a[1]);
 
   return (
-    <Shell title="Products" subtitle="Multi-tenant by Product field on the board">
-      {metaError ? (
+    <Shell title="Products" subtitle="Local product registry with optional planning sync">
+      {planningSyncEnabled && metaError ? (
         <div className="mb-4 rounded-xl border border-amber-300/25 bg-amber-200/10 px-3 py-2 text-xs text-amber-100">
-          GitHub product options unavailable: {metaError}
+          Optional planning sync unavailable: {metaError}
         </div>
       ) : null}
       <div className="mb-4 rounded-2xl border border-white/12 bg-white/5 p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="text-sm text-white/75 max-w-4xl">
-            Truth source: cards on the GitHub board. Product options are metadata only and can be stale. This view
-            keeps board+local union but prioritizes actual card counts and status mix.
+            This view merges local product settings with optional planning metadata. Runtime truth remains local;
+            planning-card counts are advisory only.
           </div>
           <div className="flex items-center gap-2">
             <form action={cleanProjectSettingsAction}>
@@ -157,12 +160,16 @@ export default async function ProductsPage() {
           <span className="rounded-full border border-white/12 bg-black/25 px-2 py-0.5">
             Active products: {activeRows.length}
           </span>
-          <span className="rounded-full border border-white/12 bg-black/25 px-2 py-0.5">
-            Cards on board: {totalCards}
-          </span>
-          <span className="rounded-full border border-white/12 bg-black/25 px-2 py-0.5">
-            Unassigned cards: {unassignedCards}
-          </span>
+          {planningSyncEnabled ? (
+            <span className="rounded-full border border-white/12 bg-black/25 px-2 py-0.5">
+              Planning cards: {totalCards}
+            </span>
+          ) : null}
+          {planningSyncEnabled ? (
+            <span className="rounded-full border border-white/12 bg-black/25 px-2 py-0.5">
+              Unassigned cards: {unassignedCards}
+            </span>
+          ) : null}
           {statusSummary.slice(0, 4).map(([status, count]) => (
             <span
               key={`status:${status}`}
@@ -214,10 +221,10 @@ export default async function ProductsPage() {
                     : "border-amber-300/25 bg-amber-200/10 text-amber-50"
                 }`}
               >
-                {row.boardLinked ? "Board option" : "No board option"}
+                {row.boardLinked ? "Planning option" : "No planning option"}
               </span>
             </div>
-            <div className="mt-2 text-sm text-white/70">View cards and edit settings scoped to this product.</div>
+            <div className="mt-2 text-sm text-white/70">View planning items and edit local settings scoped to this product.</div>
           </Link>
         ))}
       </div>

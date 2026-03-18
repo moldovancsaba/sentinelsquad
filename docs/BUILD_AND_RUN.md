@@ -74,6 +74,15 @@ cd /Users/moldovancsaba/Projects/sentinelsquad
 npm run dev
 ```
 
+#### Start the worker
+
+In a second terminal:
+
+```bash
+cd /Users/moldovancsaba/Projects/sentinelsquad
+npm run worker
+```
+
 Open:
 
 - [http://127.0.0.1:3007/dashboard](http://127.0.0.1:3007/dashboard)

@@ -378,16 +378,16 @@ export default async function DashboardPage() {
       title="Dashboard"
       subtitle={
         meta
-          ? `${meta.title} (${meta.owner}/projects/${meta.number}) · Product=${dashboardProduct}`
+          ? `Local squad runtime with optional planning sync (${meta.owner}/projects/${meta.number} · Product=${dashboardProduct})`
           : githubBoardEnabled
-          ? "GitHub board sync enabled."
+          ? "Local squad runtime with optional planning sync enabled."
           : "Local squad runtime, telemetry, and operator controls."
       }
     >
       <>
         {boardError ? (
           <div className="mb-4 rounded-2xl border border-white/12 bg-white/5 p-5 text-sm text-white/80">
-            <div className="font-semibold">GitHub board sync failed</div>
+            <div className="font-semibold">Optional planning sync failed</div>
             <div className="mt-2 font-mono text-xs opacity-80">{boardError}</div>
             <div className="mt-4 opacity-85">
               GitHub is optional here. The local `{`sentinelsquad`}` runtime is still available.
@@ -462,45 +462,49 @@ export default async function DashboardPage() {
             </div>
             <div className="rounded-2xl border border-white/12 bg-white/5 p-5">
               <div className="text-xs uppercase tracking-wide text-white/55">
-                GitHub board items
+                Planning items
               </div>
               <div className="mt-2 text-3xl font-semibold">{items.length}</div>
               <div className="mt-2 text-sm text-white/70">
                 {githubBoardEnabled
-                  ? `Showing up to 200 items filtered to Product=${dashboardProduct}.`
-                  : "Board sync is disabled in local-only mode."}
+                  ? `Showing optional planning items filtered to Product=${dashboardProduct}.`
+                  : "Planning sync is disabled in local-only mode."}
               </div>
             </div>
-            <div className="rounded-2xl border border-white/12 bg-white/5 p-5">
-              <div className="text-xs uppercase tracking-wide text-white/55">
-                By status
+            {githubBoardEnabled ? (
+              <div className="rounded-2xl border border-white/12 bg-white/5 p-5">
+                <div className="text-xs uppercase tracking-wide text-white/55">
+                  By status
+                </div>
+                <div className="mt-3 space-y-1 text-sm">
+                  {countBy(items, "Status")
+                    .slice(0, 7)
+                    .map(([k, v]) => (
+                      <div key={k} className="flex items-center justify-between">
+                        <div className="text-white/80">{k}</div>
+                        <div className="font-mono text-xs text-white/70">{v}</div>
+                      </div>
+                    ))}
+                </div>
               </div>
-              <div className="mt-3 space-y-1 text-sm">
-                {countBy(items, "Status")
-                  .slice(0, 7)
-                  .map(([k, v]) => (
-                    <div key={k} className="flex items-center justify-between">
-                      <div className="text-white/80">{k}</div>
-                      <div className="font-mono text-xs text-white/70">{v}</div>
-                    </div>
-                  ))}
+            ) : null}
+            {githubBoardEnabled ? (
+              <div className="rounded-2xl border border-white/12 bg-white/5 p-5">
+                <div className="text-xs uppercase tracking-wide text-white/55">
+                  By agent
+                </div>
+                <div className="mt-3 space-y-1 text-sm">
+                  {countBy(items, "Agent")
+                    .slice(0, 7)
+                    .map(([k, v]) => (
+                      <div key={k} className="flex items-center justify-between">
+                        <div className="text-white/80">{k}</div>
+                        <div className="font-mono text-xs text-white/70">{v}</div>
+                      </div>
+                    ))}
+                </div>
               </div>
-            </div>
-            <div className="rounded-2xl border border-white/12 bg-white/5 p-5">
-              <div className="text-xs uppercase tracking-wide text-white/55">
-                By agent
-              </div>
-              <div className="mt-3 space-y-1 text-sm">
-                {countBy(items, "Agent")
-                  .slice(0, 7)
-                  .map(([k, v]) => (
-                    <div key={k} className="flex items-center justify-between">
-                      <div className="text-white/80">{k}</div>
-                      <div className="font-mono text-xs text-white/70">{v}</div>
-                    </div>
-                ))}
-              </div>
-            </div>
+            ) : null}
             <div className="rounded-2xl border border-white/12 bg-white/5 p-5">
               <div className="text-xs uppercase tracking-wide text-white/55">
                 Email ingress

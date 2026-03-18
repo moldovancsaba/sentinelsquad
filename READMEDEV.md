@@ -72,7 +72,8 @@ Target architecture not yet fully shipped:
 2. Prepare `.env`.
 3. Install dependencies and run Prisma.
 4. Start the local app.
-5. Verify a fresh `@Controller` task in chat if your change affects runtime behavior.
+5. Start the local worker.
+6. Verify a fresh `@Controller` task in chat if your change affects runtime behavior.
 
 Canonical commands live in:
 

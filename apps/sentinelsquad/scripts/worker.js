@@ -96,6 +96,7 @@ const GITHUB_TOKEN =
   process.env.GITHUB_TOKEN ||
   process.env.MVP_PROJECT_TOKEN ||
   null;
+const GITHUB_BOARD_ENABLED = process.env.SENTINELSQUAD_ENABLE_GITHUB_BOARD === "true";
 const GITHUB_PROJECT_OWNER =
   process.env.SENTINELSQUAD_GITHUB_PROJECT_OWNER || "moldovancsaba";
 const GITHUB_REPO_OWNER =
@@ -1830,6 +1831,14 @@ async function readIssueBoardStatus(issueNumber) {
   if (!Number.isInteger(issueNum) || issueNum <= 0) {
     return { ok: false, code: "ISSUE_NUMBER_INVALID", statusName: null, reason: "Task has no linked issue." };
   }
+  if (!GITHUB_BOARD_ENABLED) {
+    return {
+      ok: false,
+      code: "BOARD_DISABLED",
+      statusName: null,
+      reason: "Optional GitHub planning sync is disabled in local-only mode."
+    };
+  }
   if (!GITHUB_TOKEN) {
     return {
       ok: false,
@@ -1946,6 +1955,16 @@ async function enforceBoardRuntimeDriftGuard(task) {
   }
 
   const boardStatus = await readIssueBoardStatus(issueNumber);
+  if (
+    boardStatus.code === "BOARD_DISABLED" ||
+    boardStatus.code === "TOKEN_MISSING" ||
+    boardStatus.code === "BOARD_READ_FAILED"
+  ) {
+    return {
+      allowed: true,
+      reason: `Optional planning sync not enforced: ${boardStatus.reason}`
+    };
+  }
   const drift = evaluateBoardRuntimeDrift(task.status, boardStatus.statusName);
   if (boardStatus.ok && !drift.drifted) {
     return { allowed: true, reason: boardStatus.reason };

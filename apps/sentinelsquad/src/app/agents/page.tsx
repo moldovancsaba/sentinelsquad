@@ -114,14 +114,17 @@ export default async function AgentsPage() {
   if (!session) redirect("/signin");
 
   const settings = await readSentinelSquadSettings();
+  const planningSyncEnabled = process.env.SENTINELSQUAD_ENABLE_GITHUB_BOARD === "true";
   let boardAgents: string[] = [];
   let boardLoadError: string | null = null;
-  try {
-    const meta = await getProjectMeta();
-    const agentField = meta.fields.find((f) => f.name === "Agent");
-    boardAgents = agentField?.options?.map((o) => o.name) ?? [];
-  } catch (e) {
-    boardLoadError = e instanceof Error ? e.message : String(e);
+  if (planningSyncEnabled) {
+    try {
+      const meta = await getProjectMeta();
+      const agentField = meta.fields.find((f) => f.name === "Agent");
+      boardAgents = agentField?.options?.map((o) => o.name) ?? [];
+    } catch (e) {
+      boardLoadError = e instanceof Error ? e.message : String(e);
+    }
   }
 
   // Seed settings-only agent configs into local registry.
@@ -500,9 +503,9 @@ export default async function AgentsPage() {
           </div>
         </div>
       ) : null}
-      {boardLoadError ? (
+      {planningSyncEnabled && boardLoadError ? (
         <div className="mb-3 rounded-xl border border-amber-300/25 bg-amber-200/10 px-3 py-2 text-xs text-amber-100">
-          GitHub board agent sync unavailable: {boardLoadError}
+          Optional planning sync unavailable: {boardLoadError}
         </div>
       ) : null}
       <div className="grid gap-3 md:grid-cols-2">
