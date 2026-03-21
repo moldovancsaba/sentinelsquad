@@ -1,6 +1,12 @@
 .DS_Store
+
+# IDE / editor local (not project source)
+.cursor/
+.fleet/
+.history/
 .idea/
 .vscode/
+.zed/
 
 # Node / Next.js ({sovereign} app)
 node_modules/
