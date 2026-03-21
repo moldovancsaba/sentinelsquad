@@ -25,6 +25,8 @@ import {
   updateAgentSmokeTestAction
 } from "@/app/agents/actions";
 
+export const dynamic = "force-dynamic";
+
 function heartbeatStatus(a: {
   runtime: string;
   lastHeartbeatAt: Date | null;

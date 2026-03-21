@@ -7,6 +7,8 @@ import { prisma } from "@/lib/prisma";
 import { getIdeUnsafeModeInfo } from "@/lib/ide";
 import { getOrCreateProjectSession, listRecentProjectSessions } from "@/lib/project-sessions";
 
+export const dynamic = "force-dynamic";
+
 export default async function IdePage() {
   const session = await requireSession();
   if (!session) redirect("/signin");

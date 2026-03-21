@@ -14,6 +14,8 @@ import {
   syncNexusSeminarToSentinelSquadAction
 } from "@/app/nexus/actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function NexusPage() {
   const session = await requireSession();
   if (!session) redirect("/signin");

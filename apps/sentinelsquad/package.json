@@ -15,6 +15,7 @@
     "e2e:dlp-guardrail": "node scripts/e2e/sentinelsquad-dlp-guardrail.e2e.js",
     "e2e:security-policy": "node scripts/e2e/sentinelsquad-security-policy-baseline.e2e.js",
     "e2e:recovery-readiness": "node scripts/e2e/sentinelsquad-recovery-readiness.e2e.js",
+    "e2e:render-contract": "node scripts/e2e/sentinelsquad-render-contract.e2e.js",
     "recovery:incident-bundle": "node scripts/recovery/sentinelsquad-incident-bundle.js",
     "lint": "echo \"Lint not configured for this Next.js version\"",
     "prisma:generate": "prisma generate",

@@ -9,6 +9,8 @@ import { listProjectItems } from "@/lib/github";
 import { readSentinelSquadSettings } from "@/lib/settings-store";
 import { requireSession } from "@/lib/session";
 
+export const dynamic = "force-dynamic";
+
 function varsToText(vars: Array<{ key: string; value: string }>) {
   return vars.map((v) => `${v.key}=${v.value}`).join("\n");
 }

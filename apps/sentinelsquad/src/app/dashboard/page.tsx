@@ -9,6 +9,8 @@ import { prisma } from "@/lib/prisma";
 import { getLocalRuntimeHealth } from "@/lib/runtime-health";
 import { getLocalSystemStatus } from "@/lib/local-system-status";
 
+export const dynamic = "force-dynamic";
+
 function countBy(items: Array<{ fields: Record<string, string> }>, field: string) {
   const out: Record<string, number> = {};
   for (const it of items) {

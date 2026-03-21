@@ -11,7 +11,7 @@
     "dev": "npm --prefix apps/sentinelsquad run dev",
     "build": "npm --prefix apps/sentinelsquad run build",
     "typecheck": "npm --prefix apps/sentinelsquad run typecheck",
-    "verify": "npm run typecheck && npm run build",
+    "verify": "npm run typecheck && npm --prefix apps/sentinelsquad run e2e:render-contract && npm run build",
     "start": "npm --prefix apps/sentinelsquad run start",
     "worker": "npm --prefix apps/sentinelsquad run worker",
     "desktop:bootstrap": "npm --prefix tools/theia-desktop run bootstrap",

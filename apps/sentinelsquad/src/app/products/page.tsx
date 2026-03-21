@@ -9,6 +9,8 @@ import { getProjectMeta, listProjectItems } from "@/lib/github";
 import { readSentinelSquadSettings } from "@/lib/settings-store";
 import { requireSession } from "@/lib/session";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProductsPage() {
   const session = await requireSession();
   if (!session) redirect("/signin");

@@ -8,6 +8,8 @@ import { MentionInput } from "@/components/MentionInput";
 import { listUnifiedChatAgentAvailability } from "@/lib/active-agents";
 import { listThreadTimeline } from "@/lib/thread-events";
 
+export const dynamic = "force-dynamic";
+
 type TimelineEntry = Awaited<ReturnType<typeof listThreadTimeline>>[number];
 
 function asRecord(value: unknown): Record<string, unknown> | null {

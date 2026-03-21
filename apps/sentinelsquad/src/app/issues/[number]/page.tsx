@@ -42,6 +42,8 @@ import { MentionInput } from "@/components/MentionInput";
 import { listUnifiedChatAgentAvailability } from "@/lib/active-agents";
 import { listThreadTimeline } from "@/lib/thread-events";
 
+export const dynamic = "force-dynamic";
+
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   return value as Record<string, unknown>;
