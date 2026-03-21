@@ -7,18 +7,12 @@ type AppSessionUser = NonNullable<Session["user"]> & { id?: string };
 export type AppSession = Session & { user: AppSessionUser };
 
 function localAuthBypassEnabled() {
-  const raw =
-    process.env.SOVEREIGN_LOCAL_AUTH_BYPASS ??
-    process.env.SENTINELSQUAD_LOCAL_AUTH_BYPASS;
+  const raw = process.env.SOVEREIGN_LOCAL_AUTH_BYPASS;
   return raw !== "false";
 }
 
 async function localBypassUser(): Promise<AppSessionUser> {
-  const email = String(
-    process.env.SOVEREIGN_DEV_LOGIN_EMAIL ||
-      process.env.SENTINELSQUAD_DEV_LOGIN_EMAIL ||
-      "dev@sovereign.local"
-  )
+  const email = String(process.env.SOVEREIGN_DEV_LOGIN_EMAIL || "dev@sovereign.local")
     .trim()
     .toLowerCase();
   const user = await prisma.user.upsert({

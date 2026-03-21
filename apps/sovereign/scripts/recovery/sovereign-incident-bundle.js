@@ -12,8 +12,8 @@ function parseArgs(argv) {
   const args = {
     issue: null,
     sinceHours: 24 * 7,
-    out: path.resolve(process.cwd(), ".sentinelsquad/recovery/incident-bundle.json"),
-    mode: process.env.SENTINELSQUAD_RECOVERY_DRILL_MODE || "AUTO"
+    out: path.resolve(process.cwd(), ".sovereign/recovery/incident-bundle.json"),
+    mode: process.env.SOVEREIGN_RECOVERY_DRILL_MODE || "AUTO"
   };
 
   for (let i = 2; i < argv.length; i += 1) {
@@ -98,6 +98,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error("[sentinelsquad-incident-bundle] failed:", error.message || error);
+  console.error("[sovereign-incident-bundle] failed:", error.message || error);
   process.exitCode = 1;
 });

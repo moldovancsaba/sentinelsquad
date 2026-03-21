@@ -1,14 +1,10 @@
-/**
- * Prefer SOVEREIGN_* env names; fall back to legacy SENTINELSQUAD_* where both are supported.
- */
-export function sovereignEnv(primary: string, legacy: string): string | undefined {
-  const a = process.env[primary];
-  if (a !== undefined && a !== "") return a;
-  const b = process.env[legacy];
-  if (b !== undefined && b !== "") return b;
+/** Read `SOVEREIGN_*` (and other single-key) environment variables. */
+export function sovereignEnv(name: string): string | undefined {
+  const v = process.env[name];
+  if (v !== undefined && v !== "") return v;
   return undefined;
 }
 
-export function sovereignEnvDefault(primary: string, legacy: string, fallback: string): string {
-  return sovereignEnv(primary, legacy) ?? fallback;
+export function sovereignEnvDefault(name: string, fallback: string): string {
+  return sovereignEnv(name) ?? fallback;
 }

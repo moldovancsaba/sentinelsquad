@@ -38,9 +38,9 @@ export function getLocalSystemStatus(): LocalServiceStatus[] {
   const appListening = portListening(3007);
   const postgresListening = portListening(34765);
   const ollamaListening = portListening(11434);
-  const workerLoaded = launchAgentAnyLoaded(["com.sovereign.worker", "com.sentinelsquad.worker"]);
-  const ollamaLoaded = launchAgentAnyLoaded(["com.sovereign.ollama", "com.sentinelsquad.ollama"]);
-  const appLoaded = launchAgentAnyLoaded(["com.sovereign.app", "com.sentinelsquad.app"]);
+  const workerLoaded = launchAgentAnyLoaded(["com.sovereign.worker"]);
+  const ollamaLoaded = launchAgentAnyLoaded(["com.sovereign.ollama"]);
+  const appLoaded = launchAgentAnyLoaded(["com.sovereign.app"]);
 
   return [
     {

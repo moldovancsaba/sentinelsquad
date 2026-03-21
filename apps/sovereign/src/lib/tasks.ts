@@ -5,7 +5,7 @@ import {
   CONTROL_INTENT_BETA_REASON,
   evaluateTaskJudgementGate
 } from "@/lib/judgement-gates";
-import { getActiveTasteRubricVersion, readSentinelSquadSettings } from "@/lib/settings-store";
+import { getActiveTasteRubricVersion, readSovereignSettings } from "@/lib/settings-store";
 import { recordTaskPromptPackageInvariant } from "@/lib/prompt-package-invariants";
 import {
   summarizeToolCallProtocolEnvelope,
@@ -18,9 +18,9 @@ import {
 import { deriveCoreCommandsForEnvelope, mergeObservedCommandAccessEntries } from "@/lib/command-access-policy";
 import type { RuntimeConfigResolution } from "@/lib/runtime-config";
 import { sovereignEnv } from "@/lib/env-sovereign";
-import { writeSentinelSquadSettings } from "@/lib/settings-store";
+import { writeSovereignSettings } from "@/lib/settings-store";
 const DEFAULT_MAX_ATTEMPTS = Number(
-  sovereignEnv("SOVEREIGN_TASK_MAX_ATTEMPTS", "SENTINELSQUAD_TASK_MAX_ATTEMPTS") || "3"
+  sovereignEnv("SOVEREIGN_TASK_MAX_ATTEMPTS") || "3"
 );
 
 function asTrimmed(value: unknown) {
@@ -210,7 +210,7 @@ export async function enqueueTask(params: {
   promptPackageSnapshot?: EnqueueTaskPromptPackageSnapshot;
   runtimeConfigResolution?: RuntimeConfigResolution | null;
 }) {
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const activeTasteRubric = getActiveTasteRubricVersion(settings);
   const payloadRecord: Record<string, unknown> =
     params.payload && typeof params.payload === "object" && !Array.isArray(params.payload)
@@ -275,7 +275,7 @@ export async function enqueueTask(params: {
     );
     if (observed.changed) {
       settings.commandAccess = observed.entries;
-      await writeSentinelSquadSettings(settings);
+      await writeSovereignSettings(settings);
     }
   } else if (toolCallProtocolValidation.present) {
     payloadRecord.toolCallProtocolValidation = {

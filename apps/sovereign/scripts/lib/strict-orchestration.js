@@ -14,19 +14,16 @@ function parseBool(value, fallback = false) {
   return fallback;
 }
 
-function envOr(primary, legacy, fallback) {
-  return normalizeText(process.env[primary] || process.env[legacy] || fallback);
+function envKey(key, fallback) {
+  return normalizeText(process.env[key] || fallback);
 }
 
 function strictConfigFromEnv() {
-  const drafterKey = envOr("SOVEREIGN_ORCH_DRAFTER_KEY", "SENTINELSQUAD_ORCH_DRAFTER_KEY", "Drafter");
-  const writerKey = envOr("SOVEREIGN_ORCH_WRITER_KEY", "SENTINELSQUAD_ORCH_WRITER_KEY", "Writer");
-  const controllerKey = envOr("SOVEREIGN_ORCH_CONTROLLER_KEY", "SENTINELSQUAD_ORCH_CONTROLLER_KEY", "Controller");
+  const drafterKey = envKey("SOVEREIGN_ORCH_DRAFTER_KEY", "Drafter");
+  const writerKey = envKey("SOVEREIGN_ORCH_WRITER_KEY", "Writer");
+  const controllerKey = envKey("SOVEREIGN_ORCH_CONTROLLER_KEY", "Controller");
   return {
-    enabled: parseBool(
-      process.env.SOVEREIGN_STRICT_ORCHESTRATION || process.env.SENTINELSQUAD_STRICT_ORCHESTRATION || "1",
-      true
-    ),
+    enabled: parseBool(process.env.SOVEREIGN_STRICT_ORCHESTRATION || "1", true),
     drafterKey,
     writerKey,
     controllerKey,

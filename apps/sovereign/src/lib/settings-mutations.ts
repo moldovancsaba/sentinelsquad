@@ -5,8 +5,8 @@ import {
   type ProjectSetting,
   type ProjectVar,
   type TasteRubricVersion,
-  readSentinelSquadSettings,
-  writeSentinelSquadSettings
+  readSovereignSettings,
+  writeSovereignSettings
 } from "@/lib/settings-store";
 import {
   diffAgentRuntimeSettingMutations,
@@ -96,7 +96,7 @@ export async function upsertAgentSetting(input: {
   const agentName = input.agentName.trim();
   if (!agentName) throw new Error("Agent name is required.");
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const next = settings.agents.slice();
 
   const wantedId = input.agentId?.trim() || null;
@@ -136,7 +136,7 @@ export async function upsertAgentSetting(input: {
   if (idx >= 0) next[idx] = row;
   else next.push(row);
 
-  await writeSentinelSquadSettings({
+  await writeSovereignSettings({
     ...settings,
     agents: next.sort((a, b) => a.agentName.localeCompare(b.agentName))
   });
@@ -164,8 +164,8 @@ export async function removeAgentSetting(input: {
   const agentName = input.agentName?.trim().toLowerCase() || null;
   if (!agentId && !agentName) throw new Error("Missing agent selector.");
 
-  const settings = await readSentinelSquadSettings();
-  await writeSentinelSquadSettings({
+  const settings = await readSovereignSettings();
+  await writeSovereignSettings({
     ...settings,
     agents: settings.agents.filter((a) => {
       if (agentId) return a.agentId !== agentId;
@@ -188,7 +188,7 @@ export async function mergeAgentSettings(input: {
   );
   if (!aliasSet.size) throw new Error("No aliases provided for merge.");
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const matching = settings.agents.filter((row) =>
     aliasSet.has(row.agentName.toLowerCase())
   );
@@ -223,7 +223,7 @@ export async function mergeAgentSettings(input: {
     .concat(merged)
     .sort((a, b) => a.agentName.localeCompare(b.agentName));
 
-  await writeSentinelSquadSettings({
+  await writeSovereignSettings({
     ...settings,
     agents: nextAgents
   });
@@ -245,7 +245,7 @@ export async function upsertProjectSetting(input: {
   const projectName = input.projectName.trim();
   if (!projectName) throw new Error("Project name is required.");
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const next = settings.projects.slice();
 
   const wantedId = input.projectId?.trim() || null;
@@ -285,7 +285,7 @@ export async function upsertProjectSetting(input: {
   if (idx >= 0) next[idx] = row;
   else next.push(row);
 
-  await writeSentinelSquadSettings({
+  await writeSovereignSettings({
     ...settings,
     projects: next.sort((a, b) => a.projectName.localeCompare(b.projectName))
   });
@@ -313,8 +313,8 @@ export async function removeProjectSetting(input: {
   const projectName = input.projectName?.trim().toLowerCase() || null;
   if (!projectId && !projectName) throw new Error("Missing project selector.");
 
-  const settings = await readSentinelSquadSettings();
-  await writeSentinelSquadSettings({
+  const settings = await readSovereignSettings();
+  await writeSovereignSettings({
     ...settings,
     projects: settings.projects.filter((p) => {
       if (projectId) return p.projectId !== projectId;
@@ -324,7 +324,7 @@ export async function removeProjectSetting(input: {
 }
 
 export async function cleanProjectSettings(input?: { boardProjectNames?: string[] }) {
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const boardByLower = new Map<string, string>();
   for (const name of input?.boardProjectNames || []) {
     const trimmed = name.trim();
@@ -372,7 +372,7 @@ export async function cleanProjectSettings(input?: { boardProjectNames?: string[
     a.projectName.localeCompare(b.projectName)
   );
 
-  await writeSentinelSquadSettings({
+  await writeSovereignSettings({
     ...settings,
     projects: nextProjects
   });
@@ -403,7 +403,7 @@ export async function upsertTasteRubricVersion(input: {
   const changeReason = input.changeReason?.trim() || "";
   const updatedBy = input.updatedBy?.trim() || ownerEmail;
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const existingVersions = settings.tasteRubric?.versions || [];
   const idx = existingVersions.findIndex(
     (row) => row.version.toLowerCase() === version.toLowerCase()
@@ -425,7 +425,7 @@ export async function upsertTasteRubricVersion(input: {
       ? existingVersions.map((row, rowIndex) => (rowIndex === idx ? nextRow : row))
       : existingVersions.concat(nextRow);
 
-  await writeSentinelSquadSettings({
+  await writeSovereignSettings({
     ...settings,
     tasteRubric: {
       activeVersion: version,

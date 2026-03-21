@@ -3,9 +3,9 @@ import { getAppSession } from "@/lib/app-session";
 import { sovereignEnv } from "@/lib/env-sovereign";
 import { prisma } from "@/lib/prisma";
 
-export type SentinelSquadUserRole = "ADMIN" | "OPERATOR" | "VIEWER" | "CLIENT";
+export type SovereignUserRole = "ADMIN" | "OPERATOR" | "VIEWER" | "CLIENT";
 
-export const SENTINELSQUAD_USER_ROLES: SentinelSquadUserRole[] = [
+export const SOVEREIGN_USER_ROLES: SovereignUserRole[] = [
   "ADMIN",
   "OPERATOR",
   "VIEWER",
@@ -14,7 +14,7 @@ export const SENTINELSQUAD_USER_ROLES: SentinelSquadUserRole[] = [
 
 type RequireRbacAccessOptions = {
   action: string;
-  allowedRoles: SentinelSquadUserRole[];
+  allowedRoles: SovereignUserRole[];
   entityType?: string;
   entityId?: string | null;
   metadata?: Prisma.JsonObject;
@@ -23,16 +23,16 @@ type RequireRbacAccessOptions = {
 type RbacAuthContext = {
   userId: string | null;
   userEmail: string | null;
-  role: SentinelSquadUserRole;
+  role: SovereignUserRole;
 };
 
-function normalizeRole(input: string | null | undefined): SentinelSquadUserRole | null {
+function normalizeRole(input: string | null | undefined): SovereignUserRole | null {
   const value = String(input || "")
     .trim()
     .toUpperCase();
   if (!value) return null;
-  if (SENTINELSQUAD_USER_ROLES.includes(value as SentinelSquadUserRole)) {
-    return value as SentinelSquadUserRole;
+  if (SOVEREIGN_USER_ROLES.includes(value as SovereignUserRole)) {
+    return value as SovereignUserRole;
   }
   return null;
 }
@@ -45,54 +45,46 @@ function parseEmailList(raw: string | undefined): Set<string> {
   return new Set(emails);
 }
 
-function resolveRoleFromEmail(email: string | null): SentinelSquadUserRole | null {
+function resolveRoleFromEmail(email: string | null): SovereignUserRole | null {
   if (!email) return null;
   const normalized = email.trim().toLowerCase();
   if (!normalized) return null;
 
-  const adminEmails = parseEmailList(sovereignEnv("SOVEREIGN_RBAC_ADMIN_EMAILS", "SENTINELSQUAD_RBAC_ADMIN_EMAILS"));
+  const adminEmails = parseEmailList(sovereignEnv("SOVEREIGN_RBAC_ADMIN_EMAILS"));
   if (adminEmails.has(normalized)) return "ADMIN";
 
-  const operatorEmails = parseEmailList(
-    sovereignEnv("SOVEREIGN_RBAC_OPERATOR_EMAILS", "SENTINELSQUAD_RBAC_OPERATOR_EMAILS")
-  );
+  const operatorEmails = parseEmailList(sovereignEnv("SOVEREIGN_RBAC_OPERATOR_EMAILS"));
   if (operatorEmails.has(normalized)) return "OPERATOR";
 
-  const viewerEmails = parseEmailList(
-    sovereignEnv("SOVEREIGN_RBAC_VIEWER_EMAILS", "SENTINELSQUAD_RBAC_VIEWER_EMAILS")
-  );
+  const viewerEmails = parseEmailList(sovereignEnv("SOVEREIGN_RBAC_VIEWER_EMAILS"));
   if (viewerEmails.has(normalized)) return "VIEWER";
 
-  const clientEmails = parseEmailList(
-    sovereignEnv("SOVEREIGN_RBAC_CLIENT_EMAILS", "SENTINELSQUAD_RBAC_CLIENT_EMAILS")
-  );
+  const clientEmails = parseEmailList(sovereignEnv("SOVEREIGN_RBAC_CLIENT_EMAILS"));
   if (clientEmails.has(normalized)) return "CLIENT";
 
   return null;
 }
 
-function resolveDefaultRole(): SentinelSquadUserRole {
-  return (
-    normalizeRole(sovereignEnv("SOVEREIGN_RBAC_DEFAULT_ROLE", "SENTINELSQUAD_RBAC_DEFAULT_ROLE")) || "OPERATOR"
-  );
+function resolveDefaultRole(): SovereignUserRole {
+  return normalizeRole(sovereignEnv("SOVEREIGN_RBAC_DEFAULT_ROLE")) || "OPERATOR";
 }
 
-export function resolveSentinelSquadUserRole(email: string | null): SentinelSquadUserRole {
+export function resolveSovereignUserRole(email: string | null): SovereignUserRole {
   return resolveRoleFromEmail(email) || resolveDefaultRole();
 }
 
-function formatAllowedRoles(roles: SentinelSquadUserRole[]) {
+function formatAllowedRoles(roles: SovereignUserRole[]) {
   return roles.join(", ");
 }
 
 async function recordRbacAuditEvent(input: {
   action: string;
-  role: SentinelSquadUserRole;
+  role: SovereignUserRole;
   allowed: boolean;
   reason: string;
   userId: string | null;
   userEmail: string | null;
-  allowedRoles: SentinelSquadUserRole[];
+  allowedRoles: SovereignUserRole[];
   entityType?: string;
   entityId?: string | null;
   metadata?: Prisma.JsonObject;
@@ -129,7 +121,7 @@ export async function requireRbacAccess(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userId = ((session.user as any).id as string | undefined) || null;
   const userEmail = session.user.email ? String(session.user.email).trim().toLowerCase() : null;
-  const role = resolveSentinelSquadUserRole(userEmail);
+  const role = resolveSovereignUserRole(userEmail);
   const allowed = options.allowedRoles.includes(role);
 
   const reason = allowed

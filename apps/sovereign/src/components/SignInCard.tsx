@@ -28,8 +28,8 @@ export function SignInCard(props: { githubEnabled: boolean; devEnabled: boolean 
           <div className={props.githubEnabled ? "mt-6" : "mt-2"} />
           <div className="text-lg font-semibold">Dev Login</div>
           <div className="mt-2 text-sm text-white/70">
-            Enabled because `SOVEREIGN_DEV_LOGIN_PASSWORD` or `SENTINELSQUAD_DEV_LOGIN_PASSWORD`
-            is set. Use this only on your local machine.
+            Enabled because `SOVEREIGN_DEV_LOGIN_PASSWORD` is set. Use this only on your local
+            machine.
           </div>
           <button
             type="button"
@@ -44,8 +44,7 @@ export function SignInCard(props: { githubEnabled: boolean; devEnabled: boolean 
       {!props.githubEnabled && !props.devEnabled ? (
         <div className="mt-4 text-sm text-white/70">
           No auth providers configured. Set GitHub OAuth (`GITHUB_CLIENT_ID` /
-          `GITHUB_CLIENT_SECRET`) or enable dev login (`SOVEREIGN_DEV_LOGIN_PASSWORD` or
-          `SENTINELSQUAD_DEV_LOGIN_PASSWORD`).
+          `GITHUB_CLIENT_SECRET`) or enable dev login (`SOVEREIGN_DEV_LOGIN_PASSWORD`).
         </div>
       ) : null}
     </div>

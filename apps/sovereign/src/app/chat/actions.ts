@@ -27,7 +27,6 @@ function normalizeOperatorCommand(input: string) {
   return input
     .trim()
     .replace(/^@sovereign-local-operator\s+/i, "")
-    .replace(/^@sentinelsquad-local-operator\s+/i, "")
     .replace(/\s+/g, " ")
     .toLowerCase();
 }
@@ -328,9 +327,7 @@ export async function initializeNexusCellAction() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userEmail = ((session.user as any).email as string | undefined) ?? null;
 
-  const controllerKey = String(
-    sovereignEnvDefault("SOVEREIGN_ORCH_CONTROLLER_KEY", "SENTINELSQUAD_ORCH_CONTROLLER_KEY", "Controller")
-  ).trim();
+  const controllerKey = String(sovereignEnvDefault("SOVEREIGN_ORCH_CONTROLLER_KEY", "Controller")).trim();
   const command =
     "@Controller initialize the Sovereign orchestration environment and run a baseline team benchmark.";
 

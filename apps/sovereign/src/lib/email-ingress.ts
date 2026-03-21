@@ -63,28 +63,21 @@ function isTruthy(value: string | undefined, fallback = false) {
 }
 
 function resolveSenderAuth(senderEmail: string): SenderAuthResult {
-  const blocked = parseAddressList(
-    process.env.SOVEREIGN_EMAIL_BLOCKED_SENDERS || process.env.SENTINELSQUAD_EMAIL_BLOCKED_SENDERS
-  );
-  const trusted = parseAddressList(
-    process.env.SOVEREIGN_EMAIL_TRUSTED_SENDERS || process.env.SENTINELSQUAD_EMAIL_TRUSTED_SENDERS
-  );
-  const requireTrusted = isTruthy(
-    process.env.SOVEREIGN_EMAIL_REQUIRE_TRUSTED || process.env.SENTINELSQUAD_EMAIL_REQUIRE_TRUSTED,
-    true
-  );
+  const blocked = parseAddressList(process.env.SOVEREIGN_EMAIL_BLOCKED_SENDERS);
+  const trusted = parseAddressList(process.env.SOVEREIGN_EMAIL_TRUSTED_SENDERS);
+  const requireTrusted = isTruthy(process.env.SOVEREIGN_EMAIL_REQUIRE_TRUSTED, true);
   const email = normalizeEmail(senderEmail);
 
   if (!email) {
     return { allowed: false, reason: "Sender email is missing." };
   }
   if (blocked.has(email)) {
-    return { allowed: false, reason: "Sender is blocked by SENTINELSQUAD_EMAIL_BLOCKED_SENDERS." };
+    return { allowed: false, reason: "Sender is blocked by SOVEREIGN_EMAIL_BLOCKED_SENDERS." };
   }
   if (requireTrusted && !trusted.has(email)) {
     return {
       allowed: false,
-      reason: "Sender is not in SOVEREIGN_EMAIL_TRUSTED_SENDERS (or legacy SENTINELSQUAD_*)."
+      reason: "Sender is not in SOVEREIGN_EMAIL_TRUSTED_SENDERS."
     };
   }
   return { allowed: true, reason: "Sender is authorized for email ingress." };
@@ -97,14 +90,9 @@ function clampInt(value: string | undefined, fallback: number, min: number, max:
 }
 
 function computeRetryDelayMs(attempt: number) {
-  const base = clampInt(
-    process.env.SOVEREIGN_EMAIL_RETRY_BASE_MS || process.env.SENTINELSQUAD_EMAIL_RETRY_BASE_MS,
-    1_000,
-    100,
-    60_000
-  );
+  const base = clampInt(process.env.SOVEREIGN_EMAIL_RETRY_BASE_MS, 1_000, 100, 60_000);
   const max = clampInt(
-    process.env.SOVEREIGN_EMAIL_RETRY_MAX_MS || process.env.SENTINELSQUAD_EMAIL_RETRY_MAX_MS,
+    process.env.SOVEREIGN_EMAIL_RETRY_MAX_MS,
     15_000,
     base,
     300_000
@@ -236,7 +224,7 @@ function classifyIngressFailure(error: unknown) {
 export async function handleInboundEmail(payload: InboundEmailPayload) {
   const normalized = normalizePayload(payload);
   const senderAuth = resolveSenderAuth(normalized.senderEmail);
-  const maxAttempts = clampInt(process.env.SENTINELSQUAD_EMAIL_RETRY_MAX_ATTEMPTS, 3, 1, 10);
+  const maxAttempts = clampInt(process.env.SOVEREIGN_EMAIL_RETRY_MAX_ATTEMPTS, 3, 1, 10);
 
   const existing = normalized.externalMessageId
     ? await prisma.inboundEmailEvent.findUnique({

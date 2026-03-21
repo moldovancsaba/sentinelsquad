@@ -12,13 +12,9 @@ const OPENAI_BASE_URL = String(process.env.OPENAI_BASE_URL || "https://api.opena
 const OPENAI_MODEL = String(process.env.OPENAI_MODEL || "").trim();
 const OPENAI_API_KEY = String(process.env.OPENAI_API_KEY || "").trim();
 const LEASE_ID = String(
-  process.env.SOVEREIGN_ORCHESTRATOR_LEASE_ID ||
-    process.env.SENTINELSQUAD_ORCHESTRATOR_LEASE_ID ||
-    "sovereign-primary-orchestrator"
+  process.env.SOVEREIGN_ORCHESTRATOR_LEASE_ID || "sovereign-primary-orchestrator"
 ).trim();
-const HEARTBEAT_MAX_AGE_MS = Number(
-  process.env.SOVEREIGN_HEARTBEAT_MAX_AGE_MS || process.env.SENTINELSQUAD_HEARTBEAT_MAX_AGE_MS || "120000"
-);
+const HEARTBEAT_MAX_AGE_MS = Number(process.env.SOVEREIGN_HEARTBEAT_MAX_AGE_MS || "120000");
 
 function argInt(name, fallback) {
   const hit = process.argv.find((a) => a.startsWith(`${name}=`));

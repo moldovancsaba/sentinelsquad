@@ -80,8 +80,7 @@ export async function startWorker(agentKey: string) {
       stdio: ["ignore", out, out],
       env: {
         ...process.env,
-        SOVEREIGN_WORKER_AGENT_KEY: agentKey,
-        SENTINELSQUAD_WORKER_AGENT_KEY: agentKey
+        SOVEREIGN_WORKER_AGENT_KEY: agentKey
       }
     }
   );

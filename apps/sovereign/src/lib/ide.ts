@@ -11,12 +11,11 @@ type TreeNode = {
 };
 
 const DEFAULT_IDE_ROOT = "/Users/moldovancsaba/Projects";
-const LEGACY_COMMAND_PROFILES_PATH = path.resolve(process.cwd(), ".sentinelsquad", "ide-command-profiles.json");
 const DEFAULT_COMMAND_PROFILES_PATH = path.resolve(process.cwd(), ".sovereign", "ide-command-profiles.json");
 const DEFAULT_UNSAFE_CONFIRM_PHRASE = "I UNDERSTAND THIS ENABLES FULL LOCAL ACCESS";
 
 function workspaceRoot() {
-  const root = sovereignEnvDefault("SOVEREIGN_IDE_ROOT", "SENTINELSQUAD_IDE_ROOT", DEFAULT_IDE_ROOT).trim();
+  const root = sovereignEnvDefault("SOVEREIGN_IDE_ROOT", DEFAULT_IDE_ROOT).trim();
   return path.resolve(root);
 }
 
@@ -35,16 +34,9 @@ export function getIdeWorkspaceRoot() {
 }
 
 export function getIdeUnsafeModeInfo() {
-  const enabled =
-    String(
-      process.env.SOVEREIGN_IDE_UNSAFE_FULL_ACCESS || process.env.SENTINELSQUAD_IDE_UNSAFE_FULL_ACCESS || ""
-    ).trim() === "1";
+  const enabled = String(process.env.SOVEREIGN_IDE_UNSAFE_FULL_ACCESS || "").trim() === "1";
   const requiredPhrase = String(
-    sovereignEnvDefault(
-      "SOVEREIGN_IDE_UNSAFE_CONFIRM_PHRASE",
-      "SENTINELSQUAD_IDE_UNSAFE_CONFIRM_PHRASE",
-      DEFAULT_UNSAFE_CONFIRM_PHRASE
-    )
+    sovereignEnvDefault("SOVEREIGN_IDE_UNSAFE_CONFIRM_PHRASE", DEFAULT_UNSAFE_CONFIRM_PHRASE)
   ).trim();
   return { enabled, requiredPhrase };
 }
@@ -64,14 +56,9 @@ type CommandProfileConfig = {
 };
 
 function resolveIdeCommandProfilesPath() {
-  const fromEnv = sovereignEnvDefault(
-    "SOVEREIGN_IDE_COMMAND_PROFILES",
-    "SENTINELSQUAD_IDE_COMMAND_PROFILES",
-    ""
-  ).trim();
+  const fromEnv = sovereignEnvDefault("SOVEREIGN_IDE_COMMAND_PROFILES", "").trim();
   if (fromEnv) return fromEnv;
   if (fsSync.existsSync(DEFAULT_COMMAND_PROFILES_PATH)) return DEFAULT_COMMAND_PROFILES_PATH;
-  if (fsSync.existsSync(LEGACY_COMMAND_PROFILES_PATH)) return LEGACY_COMMAND_PROFILES_PATH;
   return DEFAULT_COMMAND_PROFILES_PATH;
 }
 

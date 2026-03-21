@@ -3,7 +3,7 @@ set -euo pipefail
 
 _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _DEFAULT_APP_ROOT="$(cd "${_SCRIPT_DIR}/../.." && pwd)"
-SOVEREIGN_APP_ROOT="${SOVEREIGN_APP_ROOT:-${SENTINELSQUAD_ROOT:-${_DEFAULT_APP_ROOT}}}"
+SOVEREIGN_APP_ROOT="${SOVEREIGN_APP_ROOT:-${_DEFAULT_APP_ROOT}}"
 NPM_BIN="${NPM_BIN:-$(command -v npm || true)}"
 LSOF_BIN="/usr/sbin/lsof"
 
@@ -20,9 +20,8 @@ if [[ -f .env ]]; then
   set +a
 fi
 
-export SOVEREIGN_LAUNCH_MODE="${SOVEREIGN_LAUNCH_MODE:-${SENTINELSQUAD_LAUNCH_MODE:-dev}}"
-export SENTINELSQUAD_LAUNCH_MODE="$SOVEREIGN_LAUNCH_MODE"
-APP_PORT="${SOVEREIGN_APP_PORT:-${SENTINELSQUAD_APP_PORT:-3007}}"
+export SOVEREIGN_LAUNCH_MODE="${SOVEREIGN_LAUNCH_MODE:-dev}"
+APP_PORT="${SOVEREIGN_APP_PORT:-3007}"
 
 # Ensure daemon-owned process can bind cleanly.
 if [[ -x "$LSOF_BIN" ]]; then

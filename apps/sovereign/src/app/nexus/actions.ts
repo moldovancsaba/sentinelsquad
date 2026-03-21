@@ -48,7 +48,7 @@ export async function runNexusSeminarAction() {
   const command = [
     `cd \"${runtimePath}\"`,
     `source .venv/bin/activate`,
-    `printf '%s\\n' \"${prompt.replace(/\"/g, "'")}\" | BASE_URL='http://127.0.0.1:11434/v1' API_KEY='ollama-local' python run.py --path \"${workflowPath}\" --name SentinelSquadControllerBenchmark`
+    `printf '%s\\n' \"${prompt.replace(/\"/g, "'")}\" | BASE_URL='http://127.0.0.1:11434/v1' API_KEY='ollama-local' python run.py --path \"${workflowPath}\" --name SovereignControllerBenchmark`
   ].join(" && ");
 
   try {
@@ -82,7 +82,7 @@ export async function runNexusSeminarAction() {
   revalidatePath("/nexus");
 }
 
-export async function syncNexusSeminarToSentinelSquadAction() {
+export async function syncNexusSeminarToSovereignAction() {
   const { userId, userEmail } = await requireUser();
 
   const last = await readNexusRunArtifact();

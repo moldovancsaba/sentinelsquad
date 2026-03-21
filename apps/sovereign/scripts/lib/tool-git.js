@@ -355,7 +355,7 @@ function extractGitHubPullInfo(json) {
 
 async function createPullRequest(context, args, repoRoot, headBranch) {
   if (!context.githubToken) {
-    throw new ToolGitError("TOKEN_MISSING", "git.pr.create denied: SENTINELSQUAD_GITHUB_TOKEN is missing.");
+    throw new ToolGitError("TOKEN_MISSING", "git.pr.create denied: SOVEREIGN_GITHUB_TOKEN is missing.");
   }
   const title = asTrimmed(args.title);
   if (!title) {
@@ -674,19 +674,19 @@ async function resolveGitToolContext(options = {}) {
   return {
     workspaceRoots,
     primaryWorkspaceRoot: options.primaryWorkspaceRoot || workspaceRoots[0],
-    timeoutMs: clampInt(env.SENTINELSQUAD_GIT_TIMEOUT_MS, DEFAULT_TIMEOUT_MS, 1_000, 120_000),
+    timeoutMs: clampInt(env.SOVEREIGN_GIT_TIMEOUT_MS, DEFAULT_TIMEOUT_MS, 1_000, 120_000),
     maxOutputBytes: clampInt(
-      env.SENTINELSQUAD_GIT_MAX_OUTPUT_BYTES,
+      env.SOVEREIGN_GIT_MAX_OUTPUT_BYTES,
       DEFAULT_MAX_OUTPUT_BYTES,
       4_096,
       1_048_576
     ),
-    protectedBranches: new Set(parseProtectedBranches(env.SENTINELSQUAD_GIT_PROTECTED_BRANCHES)),
+    protectedBranches: new Set(parseProtectedBranches(env.SOVEREIGN_GIT_PROTECTED_BRANCHES)),
     env,
-    repoOwner: asTrimmed(env.SENTINELSQUAD_GITHUB_REPO_OWNER) || "moldovancsaba",
-    repoName: asTrimmed(env.SENTINELSQUAD_GITHUB_REPO_NAME) || "sentinelsquad",
+    repoOwner: asTrimmed(env.SOVEREIGN_GITHUB_REPO_OWNER) || "moldovancsaba",
+    repoName: asTrimmed(env.SOVEREIGN_GITHUB_REPO_NAME) || "sovereign",
     githubToken:
-      asTrimmed(env.SENTINELSQUAD_GITHUB_TOKEN) ||
+      asTrimmed(env.SOVEREIGN_GITHUB_TOKEN) ||
       asTrimmed(env.GITHUB_TOKEN) ||
       asTrimmed(env.MVP_PROJECT_TOKEN)
   };

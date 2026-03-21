@@ -7,7 +7,7 @@ import {
   saveShellAccessSettingsAction,
   saveTasteRubricAction
 } from "@/app/settings/actions";
-import { getActiveTasteRubricVersion, readSentinelSquadSettings } from "@/lib/settings-store";
+import { getActiveTasteRubricVersion, readSovereignSettings } from "@/lib/settings-store";
 import { requireSession } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ export default async function SettingsPage() {
   const session = await requireSession();
   if (!session) redirect("/signin");
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const activeRubric = getActiveTasteRubricVersion(settings);
   const defaultPrinciples = activeRubric?.principles?.join("\n") || "";
 
@@ -247,7 +247,7 @@ export default async function SettingsPage() {
         <div className="rounded-2xl border border-white/12 bg-white/5 p-5">
           <div className="text-sm font-semibold">Storage and security</div>
           <div className="mt-1 text-xs text-white/60">
-            Settings are stored under `.sovereign/settings.json` (legacy: `.sentinelsquad/settings.json`). Keep
+            Settings are stored under `.sovereign/settings.json`. Keep
             secrets in `.env` or `.env.local`.
           </div>
         </div>

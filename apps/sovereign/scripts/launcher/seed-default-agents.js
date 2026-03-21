@@ -12,18 +12,18 @@ const {
 
 const DEFAULT_LOCAL_ENDPOINT = "http://127.0.0.1:11434";
 const DEFAULT_LOCAL_MODEL =
-  process.env.SENTINELSQUAD_WORKER_MODEL || process.env.OLLAMA_MODEL || "Granite-4.0-H-1B";
+  process.env.SOVEREIGN_WORKER_MODEL || process.env.OLLAMA_MODEL || "Granite-4.0-H-1B";
 
 function getRoleMapping() {
   return {
-    drafterKey: String(process.env.SENTINELSQUAD_ORCH_DRAFTER_KEY || "Drafter").trim(),
-    writerKey: String(process.env.SENTINELSQUAD_ORCH_WRITER_KEY || "Writer").trim(),
-    controllerKey: String(process.env.SENTINELSQUAD_ORCH_CONTROLLER_KEY || "Controller").trim()
+    drafterKey: String(process.env.SOVEREIGN_ORCH_DRAFTER_KEY || "Drafter").trim(),
+    writerKey: String(process.env.SOVEREIGN_ORCH_WRITER_KEY || "Writer").trim(),
+    controllerKey: String(process.env.SOVEREIGN_ORCH_CONTROLLER_KEY || "Controller").trim()
   };
 }
 
 function settingsPath() {
-  return path.join(process.cwd(), ".sentinelsquad", "settings.json");
+  return path.join(process.cwd(), ".sovereign", "settings.json");
 }
 
 function defaultAgents(model) {
@@ -71,7 +71,7 @@ async function writeSettings(settings) {
 
 async function ensureSettingsAgents(agents, resolvedModel) {
   const settings = (await readSettings()) || {
-    localProjectFolder: process.env.SENTINELSQUAD_LOCAL_PROJECT_ROOT || "/Users/moldovancsaba/Projects",
+    localProjectFolder: process.env.SOVEREIGN_LOCAL_PROJECT_ROOT || "/Users/moldovancsaba/Projects",
     agents: [],
     projects: [],
     commandAccess: [],

@@ -3,8 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _DEFAULT_APP_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SOVEREIGN_APP_ROOT="${SOVEREIGN_APP_ROOT:-${SENTINELSQUAD_ROOT:-${_DEFAULT_APP_ROOT}}}"
-SENTINELSQUAD_ROOT="$SOVEREIGN_APP_ROOT"
+SOVEREIGN_APP_ROOT="${SOVEREIGN_APP_ROOT:-${_DEFAULT_APP_ROOT}}"
 REPO_ROOT="$(cd "$SOVEREIGN_APP_ROOT/../.." && pwd)"
 ENV_FILE="$SOVEREIGN_APP_ROOT/.env"
 ENV_EXAMPLE="$SOVEREIGN_APP_ROOT/.env.example"
@@ -12,7 +11,7 @@ NPM_BIN="${NPM_BIN:-$(command -v npm || true)}"
 OPENSSL_BIN="${OPENSSL_BIN:-$(command -v openssl || true)}"
 DOCKER_BIN="${DOCKER_BIN:-$(command -v docker || true)}"
 LSOF_BIN="/usr/sbin/lsof"
-DB_PORT="${SOVEREIGN_DB_PORT:-${SENTINELSQUAD_DB_PORT:-34765}}"
+DB_PORT="${SOVEREIGN_DB_PORT:-34765}"
 
 if [[ -z "$NPM_BIN" || ! -x "$NPM_BIN" ]]; then
   echo "npm binary not found."
@@ -83,16 +82,11 @@ TOOL_APPROVAL_SECRET_VALUE="$(random_secret)"
 ensure_env_line "NEXTAUTH_URL" "http://localhost:3007"
 ensure_env_line "NEXT_PUBLIC_SOVEREIGN_LOCAL_AUTH_BYPASS" "true"
 ensure_env_line "SOVEREIGN_LOCAL_AUTH_BYPASS" "true"
-ensure_env_line "NEXT_PUBLIC_SENTINELSQUAD_LOCAL_AUTH_BYPASS" "true"
-ensure_env_line "SENTINELSQUAD_LOCAL_AUTH_BYPASS" "true"
 ensure_env_line "DATABASE_URL" "postgresql://sovereign:sovereign@localhost:${DB_PORT}/sovereign?schema=public"
 ensure_env_line "NEXTAUTH_SECRET" "$NEXTAUTH_SECRET_VALUE"
 ensure_env_line "SOVEREIGN_TOOL_APPROVAL_SECRET" "$TOOL_APPROVAL_SECRET_VALUE"
-ensure_env_line "SENTINELSQUAD_TOOL_APPROVAL_SECRET" "$TOOL_APPROVAL_SECRET_VALUE"
 ensure_env_line "SOVEREIGN_DEV_LOGIN_EMAIL" "dev@sovereign.local"
-ensure_env_line "SENTINELSQUAD_DEV_LOGIN_EMAIL" "dev@sovereign.local"
 ensure_env_line "SOVEREIGN_DEV_LOGIN_PASSWORD" "sovereign-local-dev"
-ensure_env_line "SENTINELSQUAD_DEV_LOGIN_PASSWORD" "sovereign-local-dev"
 
 if ! wait_for_port "$DB_PORT" 1 0; then
   if [[ -n "$DOCKER_BIN" && -x "$DOCKER_BIN" ]] && "$DOCKER_BIN" info >/dev/null 2>&1; then

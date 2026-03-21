@@ -3,10 +3,7 @@
 import { signOut } from "next-auth/react";
 
 export function SignOutButton() {
-  if (
-    (process.env.NEXT_PUBLIC_SOVEREIGN_LOCAL_AUTH_BYPASS ??
-      process.env.NEXT_PUBLIC_SENTINELSQUAD_LOCAL_AUTH_BYPASS) !== "false"
-  ) {
+  if (process.env.NEXT_PUBLIC_SOVEREIGN_LOCAL_AUTH_BYPASS !== "false") {
     return null;
   }
   return (

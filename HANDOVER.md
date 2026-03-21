@@ -38,7 +38,7 @@
 - memory retrieval, annotation, and review
 - complete provider abstraction beyond the current Ollama-first path
 - first-public OSS packaging polish
-- LLD-001 rename: **done on board** — [mvp-factory-control#437](https://github.com/moldovancsaba/mvp-factory-control/issues/437) closed **2026-03-21** (engineering sign-off; intentional legacy strings documented in issue). Canonical env names **`SOVEREIGN_*`** across major server libs; NextAuth primary provider id **`sovereign-dev`** with legacy alias **`sentinelsquad-dev`**; tool-call protocol canonical **`sovereign.tool-call`** with legacy **`sentinelsquad.tool-call`** accepted.
+- LLD-001 rename: **done on board** — [mvp-factory-control#437](https://github.com/moldovancsaba/mvp-factory-control/issues/437) closed **2026-03-21**. Runtime uses **`SOVEREIGN_*`** env vars only (no `SENTINELSQUAD_*` fallbacks), **`.sovereign/`** settings paths only, NextAuth dev provider **`sovereign-dev`** only, and tool-call protocol **`sovereign.tool-call`** only. LaunchAgent install still **boots out** `com.sentinelsquad.*` labels for machines that had the old agents.
 
 ---
 

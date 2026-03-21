@@ -235,11 +235,11 @@ function stageAgentHandoffRouter() {
 
 function stageMemoryRetrieval() {
   const config = resolveTaskMemoryConfig({
-    SENTINELSQUAD_MEMORY_QUERY_MAX_CHARS: "64",
-    SENTINELSQUAD_MEMORY_DOCUMENT_LIMIT: "24",
-    SENTINELSQUAD_MEMORY_DEFAULT_MAX_SNIPPETS: "2",
-    SENTINELSQUAD_MEMORY_DEFAULT_SNIPPET_MAX_CHARS: "120",
-    SENTINELSQUAD_MEMORY_INDEX_DOC_MAX_CHARS: "200"
+    SOVEREIGN_MEMORY_QUERY_MAX_CHARS: "64",
+    SOVEREIGN_MEMORY_DOCUMENT_LIMIT: "24",
+    SOVEREIGN_MEMORY_DEFAULT_MAX_SNIPPETS: "2",
+    SOVEREIGN_MEMORY_DEFAULT_SNIPPET_MAX_CHARS: "120",
+    SOVEREIGN_MEMORY_INDEX_DOC_MAX_CHARS: "200"
   });
   const task = {
     id: "task-memory-205",
@@ -475,7 +475,7 @@ function stagePolicyReplay() {
 async function stageFilesystemAndShell(workspaceRoot) {
   const fsContext = await resolveFilesystemToolContext({
     cwd: workspaceRoot,
-    env: { SOVEREIGN_WORKSPACE_ROOT: workspaceRoot, SENTINELSQUAD_WORKSPACE_ROOT: workspaceRoot }
+    env: { SOVEREIGN_WORKSPACE_ROOT: workspaceRoot }
   });
 
   await executeFilesystemToolCall(
@@ -527,7 +527,7 @@ async function stageGitFlow(tempRoot) {
   const remote = path.join(tempRoot, "remote.git");
   await fsp.mkdir(repo, { recursive: true });
   run("git", ["init"], repo);
-  run("git", ["config", "user.name", "SentinelSquad E2E"], repo);
+  run("git", ["config", "user.name", "Sovereign E2E"], repo);
   run("git", ["config", "user.email", "sovereign-e2e@example.com"], repo);
 
   await fsp.writeFile(path.join(repo, "README.md"), "# sovereign e2e\n", "utf8");

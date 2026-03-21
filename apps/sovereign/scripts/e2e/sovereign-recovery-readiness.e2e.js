@@ -57,7 +57,7 @@ async function stageBackup({ backupDir, mode, sinceHours }) {
       "DATABASE_URL",
       "NEXTAUTH_URL",
       "NEXTAUTH_SECRET",
-      "SENTINELSQUAD_GITHUB_TOKEN",
+      "SOVEREIGN_GITHUB_TOKEN",
       "GITHUB_CLIENT_ID",
       "GITHUB_CLIENT_SECRET"
     ],
@@ -65,7 +65,7 @@ async function stageBackup({ backupDir, mode, sinceHours }) {
       DATABASE_URL: Boolean(process.env.DATABASE_URL),
       NEXTAUTH_URL: Boolean(process.env.NEXTAUTH_URL),
       NEXTAUTH_SECRET: Boolean(process.env.NEXTAUTH_SECRET),
-      SENTINELSQUAD_GITHUB_TOKEN: Boolean(process.env.SENTINELSQUAD_GITHUB_TOKEN),
+      SOVEREIGN_GITHUB_TOKEN: Boolean(process.env.SOVEREIGN_GITHUB_TOKEN),
       GITHUB_CLIENT_ID: Boolean(process.env.GITHUB_CLIENT_ID),
       GITHUB_CLIENT_SECRET: Boolean(process.env.GITHUB_CLIENT_SECRET)
     },
@@ -188,7 +188,7 @@ async function main() {
   const runId = `sovereign-recovery-readiness-e2e-${new Date().toISOString()}`;
   const issueNumber = 120;
   const sinceHours = 24 * 7;
-  const mode = String(process.env.SENTINELSQUAD_RECOVERY_DRILL_MODE || "AUTO").toUpperCase();
+  const mode = String(process.env.SOVEREIGN_RECOVERY_DRILL_MODE || "AUTO").toUpperCase();
 
   const summary = {
     runId,

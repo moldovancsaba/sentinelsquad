@@ -5,7 +5,7 @@ import { buildAgentReadinessChecklist } from "@/lib/agent-readiness";
 import { permissionMatrixRows } from "@/lib/lifecycle-policy";
 import { getOrchestratorLeaseSnapshot } from "@/lib/orchestrator-lease";
 import { prisma } from "@/lib/prisma";
-import { readSentinelSquadSettings } from "@/lib/settings-store";
+import { readSovereignSettings } from "@/lib/settings-store";
 import { requireSession } from "@/lib/session";
 import { listUnifiedChatAgentAvailability } from "@/lib/active-agents";
 import { AGENT_MODEL_PRESETS } from "@/lib/model-presets";
@@ -116,10 +116,8 @@ export default async function AgentsPage() {
   const session = await requireSession();
   if (!session) redirect("/signin");
 
-  const settings = await readSentinelSquadSettings();
-  const planningSyncEnabled =
-    process.env.SOVEREIGN_ENABLE_GITHUB_BOARD === "true" ||
-    process.env.SENTINELSQUAD_ENABLE_GITHUB_BOARD === "true";
+  const settings = await readSovereignSettings();
+  const planningSyncEnabled = process.env.SOVEREIGN_ENABLE_GITHUB_BOARD === "true";
   let boardAgents: string[] = [];
   let boardLoadError: string | null = null;
   if (planningSyncEnabled) {

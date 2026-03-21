@@ -4,7 +4,7 @@ import { getOrchestratorLeaseSnapshot } from "@/lib/orchestrator-lease";
 import { isRuntimeRunnable, listRunningWorkers } from "@/lib/worker-process";
 
 const HEARTBEAT_MAX_AGE_MS = Number(
-  sovereignEnv("SOVEREIGN_HEARTBEAT_MAX_AGE_MS", "SENTINELSQUAD_HEARTBEAT_MAX_AGE_MS") || "120000"
+  sovereignEnv("SOVEREIGN_HEARTBEAT_MAX_AGE_MS") || "120000"
 );
 
 export type UnifiedChatAgentAvailability = {

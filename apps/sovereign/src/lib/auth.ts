@@ -9,17 +9,14 @@ function envHasGithubOAuth() {
 }
 
 function envHasDevLogin() {
-  return Boolean(
-    process.env.SOVEREIGN_DEV_LOGIN_PASSWORD ||
-      process.env.SENTINELSQUAD_DEV_LOGIN_PASSWORD
-  );
+  return Boolean(process.env.SOVEREIGN_DEV_LOGIN_PASSWORD);
 }
 
 const credentialsEnabled = envHasDevLogin();
 
-function devCredentialsProvider(id: "sovereign-dev" | "sentinelsquad-dev") {
+function devCredentialsProvider() {
   return CredentialsProvider({
-    id,
+    id: "sovereign-dev",
     name: "Dev Login",
     credentials: {
       email: { label: "Email", type: "text" },
@@ -29,16 +26,8 @@ function devCredentialsProvider(id: "sovereign-dev" | "sentinelsquad-dev") {
       const email = String(credentials?.email || "").trim().toLowerCase();
       const password = String(credentials?.password || "");
 
-      const expectedPassword = String(
-        process.env.SOVEREIGN_DEV_LOGIN_PASSWORD ||
-          process.env.SENTINELSQUAD_DEV_LOGIN_PASSWORD ||
-          ""
-      );
-      const expectedEmail = String(
-        process.env.SOVEREIGN_DEV_LOGIN_EMAIL ||
-          process.env.SENTINELSQUAD_DEV_LOGIN_EMAIL ||
-          ""
-      )
+      const expectedPassword = String(process.env.SOVEREIGN_DEV_LOGIN_PASSWORD || "");
+      const expectedEmail = String(process.env.SOVEREIGN_DEV_LOGIN_EMAIL || "")
         .trim()
         .toLowerCase();
 
@@ -68,9 +57,7 @@ export const authOptions: NextAuthOptions = {
           })
         ]
       : []),
-    ...(envHasDevLogin()
-      ? [devCredentialsProvider("sovereign-dev"), devCredentialsProvider("sentinelsquad-dev")]
-      : [])
+    ...(envHasDevLogin() ? [devCredentialsProvider()] : [])
   ],
   session: { strategy: credentialsEnabled ? "jwt" : "database" },
   pages: {

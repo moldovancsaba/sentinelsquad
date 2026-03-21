@@ -6,14 +6,9 @@ type GraphQLResponse<T> =
 
 function getGithubToken() {
   const token =
-    process.env.SOVEREIGN_GITHUB_TOKEN ||
-    process.env.SENTINELSQUAD_GITHUB_TOKEN ||
-    process.env.GITHUB_TOKEN ||
-    process.env.MVP_PROJECT_TOKEN;
+    process.env.SOVEREIGN_GITHUB_TOKEN || process.env.GITHUB_TOKEN || process.env.MVP_PROJECT_TOKEN;
   if (!token) {
-    throw new Error(
-      "Missing GitHub token. Set SOVEREIGN_GITHUB_TOKEN (or legacy SENTINELSQUAD_GITHUB_TOKEN) or GITHUB_TOKEN."
-    );
+    throw new Error("Missing GitHub token. Set SOVEREIGN_GITHUB_TOKEN or GITHUB_TOKEN.");
   }
   return token;
 }
@@ -198,9 +193,9 @@ export function reconcileBoardAgentOptions(params: {
 }
 
 export async function getProjectMeta() {
-  const owner = sovereignEnvDefault("SOVEREIGN_GITHUB_PROJECT_OWNER", "SENTINELSQUAD_GITHUB_PROJECT_OWNER", "moldovancsaba");
+  const owner = sovereignEnvDefault("SOVEREIGN_GITHUB_PROJECT_OWNER", "moldovancsaba");
   const number = Number(
-    sovereignEnv("SOVEREIGN_GITHUB_PROJECT_NUMBER", "SENTINELSQUAD_GITHUB_PROJECT_NUMBER") || "1"
+    sovereignEnv("SOVEREIGN_GITHUB_PROJECT_NUMBER") || "1"
   );
 
   const data = await ghGraphQL<{
@@ -383,8 +378,8 @@ export async function ensureProjectItemForIssue(params: {
 }) {
   const { issueNumber } = params;
   const { id: projectId } = await getProjectMeta();
-  const repoOwner = sovereignEnvDefault("SOVEREIGN_TASK_REPO_OWNER", "SENTINELSQUAD_TASK_REPO_OWNER", "moldovancsaba");
-  const repoName = sovereignEnvDefault("SOVEREIGN_TASK_REPO_NAME", "SENTINELSQUAD_TASK_REPO_NAME", "sovereign");
+  const repoOwner = sovereignEnvDefault("SOVEREIGN_TASK_REPO_OWNER", "moldovancsaba");
+  const repoName = sovereignEnvDefault("SOVEREIGN_TASK_REPO_NAME", "sovereign");
 
   const issueData = await ghGraphQL<{
     repository: { issue: { id: string } | null } | null;
@@ -491,8 +486,8 @@ export async function getItemSingleSelectValues(params: { itemId: string }) {
 }
 
 export async function getIssueDetails(params: { issueNumber: number }) {
-  const repoOwner = sovereignEnvDefault("SOVEREIGN_TASK_REPO_OWNER", "SENTINELSQUAD_TASK_REPO_OWNER", "moldovancsaba");
-  const repoName = sovereignEnvDefault("SOVEREIGN_TASK_REPO_NAME", "SENTINELSQUAD_TASK_REPO_NAME", "sovereign");
+  const repoOwner = sovereignEnvDefault("SOVEREIGN_TASK_REPO_OWNER", "moldovancsaba");
+  const repoName = sovereignEnvDefault("SOVEREIGN_TASK_REPO_NAME", "sovereign");
 
   const data = await ghGraphQL<{
     repository: {

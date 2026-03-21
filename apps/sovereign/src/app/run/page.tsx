@@ -38,7 +38,7 @@ const FLOWS: Array<{
       "npm run worker"
     ],
     cwd: "apps/sovereign",
-    notes: "Requires SOVEREIGN_WORKER_AGENT_KEY or SENTINELSQUAD_WORKER_AGENT_KEY (or --agent=...) for an ALPHA agent. See Agents page to start worker for a specific agent."
+    notes: "Requires SOVEREIGN_WORKER_AGENT_KEY (or --agent=...) for an ALPHA agent. See Agents page to start worker for a specific agent."
   },
   {
     title: "Run the MCP backlog server",

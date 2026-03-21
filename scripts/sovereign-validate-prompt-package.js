@@ -197,7 +197,7 @@ function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.help) {
     console.log(
-      "Usage: sentinelsquad-validate-prompt-package.js (--issue <n> [--repo owner/repo] | --body-file <path>) [--json]"
+      "Usage: sovereign-validate-prompt-package.js (--issue <n> [--repo owner/repo] | --body-file <path>) [--json]"
     );
     return;
   }

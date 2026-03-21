@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { readSentinelSquadSettings, writeSentinelSquadSettings } from "@/lib/settings-store";
+import { readSovereignSettings, writeSovereignSettings } from "@/lib/settings-store";
 import { getNexusRoleMapping } from "@/lib/nexus-control";
 
 const DEFAULT_LOCAL_ENDPOINT = "http://127.0.0.1:11434";
@@ -65,10 +65,10 @@ function defaultBootstrapAgents(): BootstrapAgent[] {
   return Array.from(unique.values());
 }
 
-export async function ensureSentinelSquadBootstrap() {
+export async function ensureSovereignBootstrap() {
   const bootstrapAgents = defaultBootstrapAgents();
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   let settingsChanged = false;
   const nextSettingsAgents = settings.agents.slice();
 
@@ -96,7 +96,7 @@ export async function ensureSentinelSquadBootstrap() {
   }
 
   if (settingsChanged) {
-    await writeSentinelSquadSettings({
+    await writeSovereignSettings({
       ...settings,
       agents: nextSettingsAgents.sort((a, b) => a.agentName.localeCompare(b.agentName))
     });

@@ -6,13 +6,11 @@ const SUPPORTED_MODE = new Set(["SEQUENTIAL", "PARALLEL"]);
 const SUPPORTED_ARTIFACT_KIND = new Set(["LOG", "FILE", "PATCH", "ISSUE_COMMENT", "PR"]);
 
 export const TOOL_CALL_PROTOCOL_NAME = "sovereign.tool-call";
-/** @deprecated Legacy protocol id; still accepted when validating inbound envelopes. */
-export const TOOL_CALL_PROTOCOL_LEGACY_NAME = "sentinelsquad.tool-call";
 export const TOOL_CALL_PROTOCOL_SUPPORTED_MAJOR = 1;
 export const TOOL_CALL_PROTOCOL_V1 = "1.0";
 
 function isAcceptedToolCallProtocolName(protocol: string): boolean {
-  return protocol === TOOL_CALL_PROTOCOL_NAME || protocol === TOOL_CALL_PROTOCOL_LEGACY_NAME;
+  return protocol === TOOL_CALL_PROTOCOL_NAME;
 }
 
 export type ToolCallRiskClass = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
@@ -181,7 +179,7 @@ export function validateToolCallProtocolEnvelope(input: unknown): ToolCallProtoc
       present: true,
       ok: false,
       code: "INVALID_PROTOCOL",
-      reason: `toolCallProtocol.protocol must be \"${TOOL_CALL_PROTOCOL_NAME}\" (legacy \"${TOOL_CALL_PROTOCOL_LEGACY_NAME}\" is still accepted).`
+      reason: `toolCallProtocol.protocol must be \"${TOOL_CALL_PROTOCOL_NAME}\".`
     };
   }
 

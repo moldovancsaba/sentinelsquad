@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { prisma } from "@/lib/prisma";
-import { readSentinelSquadSettings } from "@/lib/settings-store";
+import { readSovereignSettings } from "@/lib/settings-store";
 import { isMutableRuntimeSettingKey } from "@/lib/runtime-settings-mutability";
 
 type RuntimeMode = "LOCAL" | "CLOUD";
@@ -40,16 +40,7 @@ const SAFE_RUNTIME_KEYS = new Set([
   "SOVEREIGN_RUNTIME_LOCAL_MODEL",
   "SOVEREIGN_RUNTIME_CLOUD_ENDPOINT",
   "SOVEREIGN_RUNTIME_CLOUD_MODEL",
-  "SOVEREIGN_RUNTIME_CLOUD_API_KEY_ENV",
-  "SENTINELSQUAD_RUNTIME_ENDPOINT",
-  "SENTINELSQUAD_RUNTIME_MODEL",
-  "SENTINELSQUAD_RUNTIME_API_KEY_ENV",
-  "SENTINELSQUAD_RUNTIME_TIMEOUT_MS",
-  "SENTINELSQUAD_RUNTIME_LOCAL_ENDPOINT",
-  "SENTINELSQUAD_RUNTIME_LOCAL_MODEL",
-  "SENTINELSQUAD_RUNTIME_CLOUD_ENDPOINT",
-  "SENTINELSQUAD_RUNTIME_CLOUD_MODEL",
-  "SENTINELSQUAD_RUNTIME_CLOUD_API_KEY_ENV"
+  "SOVEREIGN_RUNTIME_CLOUD_API_KEY_ENV"
 ]);
 
 function normalizeText(input: string | null | undefined) {
@@ -116,33 +107,33 @@ function applyRuntimeOverrides(params: {
   };
 
   const runtimeEndpointKey =
-    params.runtime === "LOCAL" ? "SENTINELSQUAD_RUNTIME_LOCAL_ENDPOINT" : "SENTINELSQUAD_RUNTIME_CLOUD_ENDPOINT";
+    params.runtime === "LOCAL" ? "SOVEREIGN_RUNTIME_LOCAL_ENDPOINT" : "SOVEREIGN_RUNTIME_CLOUD_ENDPOINT";
   const runtimeModelKey =
-    params.runtime === "LOCAL" ? "SENTINELSQUAD_RUNTIME_LOCAL_MODEL" : "SENTINELSQUAD_RUNTIME_CLOUD_MODEL";
+    params.runtime === "LOCAL" ? "SOVEREIGN_RUNTIME_LOCAL_MODEL" : "SOVEREIGN_RUNTIME_CLOUD_MODEL";
   const runtimeApiEnvKey =
-    params.runtime === "CLOUD" ? "SENTINELSQUAD_RUNTIME_CLOUD_API_KEY_ENV" : "";
+    params.runtime === "CLOUD" ? "SOVEREIGN_RUNTIME_CLOUD_API_KEY_ENV" : "";
 
-  applyStringValue([runtimeEndpointKey, "SENTINELSQUAD_RUNTIME_ENDPOINT"], (value) => {
+  applyStringValue([runtimeEndpointKey, "SOVEREIGN_RUNTIME_ENDPOINT"], (value) => {
     params.effective.endpoint = value;
   });
 
-  applyStringValue([runtimeModelKey, "SENTINELSQUAD_RUNTIME_MODEL"], (value) => {
+  applyStringValue([runtimeModelKey, "SOVEREIGN_RUNTIME_MODEL"], (value) => {
     params.effective.model = value;
   });
 
   if (params.runtime === "CLOUD") {
-    applyStringValue([runtimeApiEnvKey, "SENTINELSQUAD_RUNTIME_API_KEY_ENV"], (value) => {
+    applyStringValue([runtimeApiEnvKey, "SOVEREIGN_RUNTIME_API_KEY_ENV"], (value) => {
       params.effective.apiKeyEnv = value;
     });
   }
 
-  const timeoutRaw = getValue("SENTINELSQUAD_RUNTIME_TIMEOUT_MS");
+  const timeoutRaw = getValue("SOVEREIGN_RUNTIME_TIMEOUT_MS");
   if (timeoutRaw) {
-    if (canApply("SENTINELSQUAD_RUNTIME_TIMEOUT_MS")) {
+    if (canApply("SOVEREIGN_RUNTIME_TIMEOUT_MS")) {
       params.effective.requestTimeoutMs = clampTimeout(timeoutRaw, params.effective.requestTimeoutMs);
-      appliedKeys.push("SENTINELSQUAD_RUNTIME_TIMEOUT_MS");
+      appliedKeys.push("SOVEREIGN_RUNTIME_TIMEOUT_MS");
     } else {
-      ignoredKeys.push("SENTINELSQUAD_RUNTIME_TIMEOUT_MS");
+      ignoredKeys.push("SOVEREIGN_RUNTIME_TIMEOUT_MS");
     }
   }
 
@@ -191,7 +182,7 @@ export async function resolveRuntimeConfigForTask(params: {
     throw new Error(`Runtime config resolution failed: agent @${params.agentKey} is not runnable.`);
   }
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const runtime = agent.runtime;
   const sourceChain: RuntimeConfigSource[] = [];
 
@@ -206,10 +197,7 @@ export async function resolveRuntimeConfigForTask(params: {
         ? normalizeText(process.env.OLLAMA_MODEL) || "deepseek-r1:1.5b"
         : normalizeText(process.env.OPENAI_MODEL) || "gpt-4o-mini",
     apiKeyEnv: runtime === "CLOUD" ? "OPENAI_API_KEY" : null,
-    requestTimeoutMs: clampTimeout(
-      process.env.SOVEREIGN_WORKER_REQUEST_TIMEOUT_MS || process.env.SENTINELSQUAD_WORKER_REQUEST_TIMEOUT_MS,
-      60_000
-    )
+    requestTimeoutMs: clampTimeout(process.env.SOVEREIGN_WORKER_REQUEST_TIMEOUT_MS, 60_000)
   };
 
   sourceChain.push({

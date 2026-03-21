@@ -72,40 +72,31 @@ export async function deleteProjectConfigAction(formData: FormData) {
   revalidatePath("/settings");
 }
 
-export async function bootstrapSentinelSquadProjectAction() {
+export async function bootstrapSovereignProjectAction() {
   const auth = await requireRbacAccess({
-    action: "PRODUCTS_BOOTSTRAP_SENTINELSQUAD_PROJECT",
+    action: "PRODUCTS_BOOTSTRAP_SOVEREIGN_PROJECT",
     allowedRoles: ["ADMIN", "OPERATOR"],
     entityType: "PROJECT_SETTINGS",
-    entityId: "SentinelSquad"
+    entityId: "Sovereign"
   });
 
   const repoRoot = path.resolve(process.cwd(), "..", "..");
-  const repoOwner =
-    process.env.SOVEREIGN_TASK_REPO_OWNER ||
-    process.env.SENTINELSQUAD_TASK_REPO_OWNER ||
-    "moldovancsaba";
-  const repoName =
-    process.env.SOVEREIGN_TASK_REPO_NAME ||
-    process.env.SENTINELSQUAD_TASK_REPO_NAME ||
-    "sovereign";
+  const repoOwner = process.env.SOVEREIGN_TASK_REPO_OWNER || "moldovancsaba";
+  const repoName = process.env.SOVEREIGN_TASK_REPO_NAME || "sovereign";
 
   // IMPORTANT: GitHub's updateProjectV2Field option update can reset existing option IDs.
   // Keep this sync opt-in only until a non-destructive API path is available.
-  if (
-    process.env.SOVEREIGN_ENABLE_PRODUCT_OPTION_SYNC === "1" ||
-    process.env.SENTINELSQUAD_ENABLE_PRODUCT_OPTION_SYNC === "1"
-  ) {
+  if (process.env.SOVEREIGN_ENABLE_PRODUCT_OPTION_SYNC === "1") {
     await ensureSingleSelectOption({
       fieldName: "Product",
-      optionName: "SentinelSquad",
+      optionName: "Sovereign",
       color: "BLUE",
-      description: "SentinelSquad unified chat and agent control plane"
+      description: "Sovereign unified chat and agent control plane"
     });
   }
 
   await upsertProjectSetting({
-    projectName: "SentinelSquad",
+    projectName: "Sovereign",
     projectUrl: "http://localhost:3007",
     projectGithub: `https://github.com/${repoOwner}/${repoName}.git`,
     vars: [
@@ -126,7 +117,7 @@ export async function bootstrapSentinelSquadProjectAction() {
   });
 
   revalidatePath("/products");
-  revalidatePath("/products/SentinelSquad");
+  revalidatePath("/products/Sovereign");
   revalidatePath("/settings");
 }
 

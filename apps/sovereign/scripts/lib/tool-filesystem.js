@@ -143,8 +143,8 @@ async function resolveWorkspaceRoots(options) {
   const envRoots = parseWorkspaceEnvList(
     asTrimmed(env?.SOVEREIGN_WORKSPACE_ROOT) ||
       asTrimmed(env?.SOVEREIGN_LOCAL_PROJECT_ROOT) ||
-      asTrimmed(env?.SENTINELSQUAD_WORKSPACE_ROOT) ||
-      asTrimmed(env?.SENTINELSQUAD_LOCAL_PROJECT_ROOT)
+      asTrimmed(env?.SOVEREIGN_WORKSPACE_ROOT) ||
+      asTrimmed(env?.SOVEREIGN_LOCAL_PROJECT_ROOT)
   );
   const settingsRoot = await readSettingsWorkspaceRoot(asTrimmed(options?.settingsFile));
   const rawRoots = unique([...envRoots, settingsRoot, cwd].filter(Boolean));

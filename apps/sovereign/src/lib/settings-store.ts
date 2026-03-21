@@ -52,7 +52,7 @@ export type TasteRubricConfig = {
   versions: TasteRubricVersion[];
 };
 
-export type SentinelSquadSettings = {
+export type SovereignSettings = {
   localProjectFolder: string;
   agents: AgentSetting[];
   projects: ProjectSetting[];
@@ -65,24 +65,12 @@ export type SentinelSquadSettings = {
 const DEFAULT_PROJECT_ROOT = "/Users/moldovancsaba/Projects";
 
 function settingsPath() {
-  const cwd = process.cwd();
-  const next = path.join(cwd, ".sovereign", "settings.json");
-  const legacy = path.join(cwd, ".sentinelsquad", "settings.json");
-  try {
-    if (fsSync.existsSync(next)) return next;
-    if (fsSync.existsSync(legacy)) return legacy;
-  } catch {
-    // ignore
-  }
-  return next;
+  return path.join(process.cwd(), ".sovereign", "settings.json");
 }
 
-function defaultSettings(): SentinelSquadSettings {
+function defaultSettings(): SovereignSettings {
   return {
-    localProjectFolder:
-      process.env.SOVEREIGN_LOCAL_PROJECT_ROOT ||
-      process.env.SENTINELSQUAD_LOCAL_PROJECT_ROOT ||
-      DEFAULT_PROJECT_ROOT,
+    localProjectFolder: process.env.SOVEREIGN_LOCAL_PROJECT_ROOT || DEFAULT_PROJECT_ROOT,
     agents: [],
     projects: [],
     commandAccess: [],
@@ -191,7 +179,7 @@ function normalizeTasteRubric(input: unknown): TasteRubricConfig | null {
   };
 }
 
-function normalizeSettings(raw: unknown): SentinelSquadSettings {
+function normalizeSettings(raw: unknown): SovereignSettings {
   const base = defaultSettings();
   const record = asRecord(raw);
   if (!record) return base;
@@ -257,19 +245,19 @@ async function ensureSettingsDir() {
   return file;
 }
 
-export async function readSentinelSquadSettings(): Promise<SentinelSquadSettings> {
+export async function readSovereignSettings(): Promise<SovereignSettings> {
   const file = await ensureSettingsDir();
   try {
     const raw = await fs.readFile(file, "utf8");
     return normalizeSettings(JSON.parse(raw));
   } catch {
     const defaults = defaultSettings();
-    await writeSentinelSquadSettings(defaults);
+    await writeSovereignSettings(defaults);
     return defaults;
   }
 }
 
-export async function writeSentinelSquadSettings(input: SentinelSquadSettings) {
+export async function writeSovereignSettings(input: SovereignSettings) {
   const file = await ensureSettingsDir();
   const next = {
     ...input,
@@ -278,7 +266,7 @@ export async function writeSentinelSquadSettings(input: SentinelSquadSettings) {
   await fs.writeFile(file, `${JSON.stringify(next, null, 2)}\n`, "utf8");
 }
 
-export function getActiveTasteRubricVersion(settings: SentinelSquadSettings): TasteRubricVersion | null {
+export function getActiveTasteRubricVersion(settings: SovereignSettings): TasteRubricVersion | null {
   const rubric = settings.tasteRubric;
   if (!rubric || !rubric.versions.length) return null;
   return (

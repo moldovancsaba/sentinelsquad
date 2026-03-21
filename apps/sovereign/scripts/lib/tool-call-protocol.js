@@ -6,12 +6,11 @@ const SUPPORTED_MODE = new Set(["SEQUENTIAL", "PARALLEL"]);
 const SUPPORTED_ARTIFACT_KIND = new Set(["LOG", "FILE", "PATCH", "ISSUE_COMMENT", "PR"]);
 
 const TOOL_CALL_PROTOCOL_NAME = "sovereign.tool-call";
-const TOOL_CALL_PROTOCOL_LEGACY_NAME = "sentinelsquad.tool-call";
 const TOOL_CALL_PROTOCOL_SUPPORTED_MAJOR = 1;
 const TOOL_CALL_PROTOCOL_V1 = "1.0";
 
 function isAcceptedToolCallProtocolName(protocol) {
-  return protocol === TOOL_CALL_PROTOCOL_NAME || protocol === TOOL_CALL_PROTOCOL_LEGACY_NAME;
+  return protocol === TOOL_CALL_PROTOCOL_NAME;
 }
 
 function asRecord(value) {
@@ -102,7 +101,7 @@ function validateToolCallProtocolEnvelope(input) {
       present: true,
       ok: false,
       code: "INVALID_PROTOCOL",
-      reason: `toolCallProtocol.protocol must be "${TOOL_CALL_PROTOCOL_NAME}" (legacy "${TOOL_CALL_PROTOCOL_LEGACY_NAME}" accepted).`
+      reason: `toolCallProtocol.protocol must be "${TOOL_CALL_PROTOCOL_NAME}".`
     };
   }
 

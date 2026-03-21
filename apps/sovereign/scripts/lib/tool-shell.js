@@ -161,45 +161,45 @@ async function resolveWorkspaceCwd(workspaceRoots, candidatePath, operation) {
 function buildResourceLimits(env) {
   return {
     defaultTimeoutMs: clampInt(
-      env.SENTINELSQUAD_SHELL_DEFAULT_TIMEOUT_MS,
+      env.SOVEREIGN_SHELL_DEFAULT_TIMEOUT_MS,
       DEFAULT_TIMEOUT_MS,
       500,
       MAX_TIMEOUT_MS
     ),
-    maxTimeoutMs: clampInt(env.SENTINELSQUAD_SHELL_MAX_TIMEOUT_MS, MAX_TIMEOUT_MS, 1_000, 600_000),
+    maxTimeoutMs: clampInt(env.SOVEREIGN_SHELL_MAX_TIMEOUT_MS, MAX_TIMEOUT_MS, 1_000, 600_000),
     maxOutputBytes: clampInt(
-      env.SENTINELSQUAD_SHELL_MAX_OUTPUT_BYTES,
+      env.SOVEREIGN_SHELL_MAX_OUTPUT_BYTES,
       DEFAULT_MAX_OUTPUT_BYTES,
       4_096,
       MAX_OUTPUT_BYTES
     ),
     maxCommandChars: clampInt(
-      env.SENTINELSQUAD_SHELL_MAX_COMMAND_CHARS,
+      env.SOVEREIGN_SHELL_MAX_COMMAND_CHARS,
       DEFAULT_MAX_COMMAND_CHARS,
       64,
       MAX_COMMAND_CHARS
     ),
-    cancelPollMs: clampInt(env.SENTINELSQUAD_SHELL_CANCEL_POLL_MS, DEFAULT_CANCEL_POLL_MS, 100, 5_000),
-    killGraceMs: clampInt(env.SENTINELSQUAD_SHELL_KILL_GRACE_MS, DEFAULT_KILL_GRACE_MS, 200, 10_000),
-    maxCpuSeconds: clampInt(env.SENTINELSQUAD_SHELL_MAX_CPU_SECONDS, DEFAULT_MAX_CPU_SECONDS, 1, 3600),
+    cancelPollMs: clampInt(env.SOVEREIGN_SHELL_CANCEL_POLL_MS, DEFAULT_CANCEL_POLL_MS, 100, 5_000),
+    killGraceMs: clampInt(env.SOVEREIGN_SHELL_KILL_GRACE_MS, DEFAULT_KILL_GRACE_MS, 200, 10_000),
+    maxCpuSeconds: clampInt(env.SOVEREIGN_SHELL_MAX_CPU_SECONDS, DEFAULT_MAX_CPU_SECONDS, 1, 3600),
     maxMemoryKb: clampInt(
-      env.SENTINELSQUAD_SHELL_MAX_MEMORY_KB,
+      env.SOVEREIGN_SHELL_MAX_MEMORY_KB,
       DEFAULT_MAX_MEMORY_KB,
       65_536,
       8_388_608
     ),
     maxProcessCount: clampInt(
-      env.SENTINELSQUAD_SHELL_MAX_PROCESS_COUNT,
+      env.SOVEREIGN_SHELL_MAX_PROCESS_COUNT,
       DEFAULT_MAX_PROCESS_COUNT,
       0,
       4096
     ),
-    shellBinary: asTrimmed(env.SENTINELSQUAD_SHELL_BINARY) || DEFAULT_SHELL_BINARY
+    shellBinary: asTrimmed(env.SOVEREIGN_SHELL_BINARY) || DEFAULT_SHELL_BINARY
   };
 }
 
 function buildAllowedEnvKeys(env) {
-  const extra = parseKeyList(env.SENTINELSQUAD_SHELL_ENV_ALLOWLIST);
+  const extra = parseKeyList(env.SOVEREIGN_SHELL_ENV_ALLOWLIST);
   return unique([...BASE_ENV_ALLOWLIST, ...extra]);
 }
 
@@ -217,8 +217,8 @@ async function resolveShellToolContext(options = {}) {
   const sessionId = asTrimmed(options.sessionId) || `task-${Date.now().toString(36)}`;
   const sessionRootBase =
     asTrimmed(options.sessionRootBase) ||
-    asTrimmed(env.SENTINELSQUAD_SHELL_SESSION_ROOT) ||
-    path.join(process.cwd(), ".sentinelsquad", "shell-sessions");
+    asTrimmed(env.SOVEREIGN_SHELL_SESSION_ROOT) ||
+    path.join(process.cwd(), ".sovereign", "shell-sessions");
   const sessionRoot = path.resolve(sessionRootBase, sessionId);
   await fsp.mkdir(sessionRoot, { recursive: true });
 

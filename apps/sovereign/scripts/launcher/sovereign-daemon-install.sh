@@ -14,9 +14,9 @@ OLLAMA_BIN="${OLLAMA_BIN:-$(command -v ollama || true)}"
 LSOF_BIN="/usr/sbin/lsof"
 CURL_BIN="/usr/bin/curl"
 PKILL_BIN="/usr/bin/pkill"
-APP_PORT="${SOVEREIGN_APP_PORT:-${SENTINELSQUAD_APP_PORT:-3007}}"
-APP_URL="${SOVEREIGN_APP_URL:-${SENTINELSQUAD_APP_URL:-http://127.0.0.1:${APP_PORT}}}"
-SIGNIN_PATH="${SOVEREIGN_SIGNIN_PATH:-${SENTINELSQUAD_SIGNIN_PATH:-/signin}}"
+APP_PORT="${SOVEREIGN_APP_PORT:-3007}"
+APP_URL="${SOVEREIGN_APP_URL:-http://127.0.0.1:${APP_PORT}}"
+SIGNIN_PATH="${SOVEREIGN_SIGNIN_PATH:-/signin}"
 
 if [[ -z "$NPM_BIN" || -z "$NODE_BIN" || -z "$OLLAMA_BIN" ]]; then
   echo "Missing required binary. npm=$NPM_BIN node=$NODE_BIN ollama=$OLLAMA_BIN"
@@ -66,10 +66,8 @@ cat > "$PLIST_WORKER" <<PLIST
   <key>EnvironmentVariables</key>
   <dict>
     <key>SOVEREIGN_APP_ROOT</key><string>$SOVEREIGN_APP_ROOT</string>
-    <key>SENTINELSQUAD_ROOT</key><string>$SOVEREIGN_APP_ROOT</string>
     <key>NODE_BIN</key><string>$NODE_BIN</string>
-    <key>SOVEREIGN_WORKER_AGENT_KEY</key><string>${SOVEREIGN_WORKER_AGENT_KEY:-${SENTINELSQUAD_WORKER_AGENT_KEY:-Controller}}</string>
-    <key>SENTINELSQUAD_WORKER_AGENT_KEY</key><string>${SOVEREIGN_WORKER_AGENT_KEY:-${SENTINELSQUAD_WORKER_AGENT_KEY:-Controller}}</string>
+    <key>SOVEREIGN_WORKER_AGENT_KEY</key><string>${SOVEREIGN_WORKER_AGENT_KEY:-Controller}</string>
     <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
   <key>WorkingDirectory</key><string>$SOVEREIGN_APP_ROOT</string>
@@ -95,10 +93,8 @@ cat > "$PLIST_APP" <<PLIST
   <key>EnvironmentVariables</key>
   <dict>
     <key>SOVEREIGN_APP_ROOT</key><string>$SOVEREIGN_APP_ROOT</string>
-    <key>SENTINELSQUAD_ROOT</key><string>$SOVEREIGN_APP_ROOT</string>
     <key>NPM_BIN</key><string>$NPM_BIN</string>
-    <key>SOVEREIGN_LAUNCH_MODE</key><string>${SOVEREIGN_LAUNCH_MODE:-${SENTINELSQUAD_LAUNCH_MODE:-dev}}</string>
-    <key>SENTINELSQUAD_LAUNCH_MODE</key><string>${SOVEREIGN_LAUNCH_MODE:-${SENTINELSQUAD_LAUNCH_MODE:-dev}}</string>
+    <key>SOVEREIGN_LAUNCH_MODE</key><string>${SOVEREIGN_LAUNCH_MODE:-dev}</string>
     <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
   <key>WorkingDirectory</key><string>$SOVEREIGN_APP_ROOT</string>

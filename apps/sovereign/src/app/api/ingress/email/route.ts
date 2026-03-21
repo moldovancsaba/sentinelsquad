@@ -8,13 +8,10 @@ function readBearerToken(value: string | null) {
 }
 
 function isIngressAuthorized(req: NextRequest) {
-  const expected = String(
-    process.env.SOVEREIGN_EMAIL_INGRESS_TOKEN || process.env.SENTINELSQUAD_EMAIL_INGRESS_TOKEN || ""
-  ).trim();
+  const expected = String(process.env.SOVEREIGN_EMAIL_INGRESS_TOKEN || "").trim();
   if (!expected) return true;
   const headerToken =
     req.headers.get("x-sovereign-ingress-token") ||
-    req.headers.get("x-sentinelsquad-ingress-token") ||
     readBearerToken(req.headers.get("authorization")) ||
     "";
   return String(headerToken).trim() === expected;

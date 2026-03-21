@@ -9,7 +9,6 @@
     "typecheck": "tsc --noEmit",
     "start": "next start -p 3007",
     "e2e:sovereign": "node scripts/e2e/sovereign-postmvp.e2e.js",
-    "e2e:sentinelsquad": "npm run e2e:sovereign",
     "e2e:provenance": "node scripts/e2e/sovereign-provenance-identity.e2e.js",
     "e2e:filesystem-safety": "node scripts/e2e/sovereign-filesystem-safety.e2e.js",
     "e2e:strict-role-policy": "node scripts/e2e/sovereign-strict-role-policy.e2e.js",

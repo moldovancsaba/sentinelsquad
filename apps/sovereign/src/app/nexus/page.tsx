@@ -11,7 +11,7 @@ import {
 } from "@/lib/nexus-control";
 import {
   runNexusSeminarAction,
-  syncNexusSeminarToSentinelSquadAction
+  syncNexusSeminarToSovereignAction
 } from "@/app/nexus/actions";
 
 export const dynamic = "force-dynamic";
@@ -68,7 +68,7 @@ export default async function NexusPage() {
                 Run Benchmark
               </button>
             </form>
-            <form action={syncNexusSeminarToSentinelSquadAction}>
+            <form action={syncNexusSeminarToSovereignAction}>
               <button
                 type="submit"
                 className="rounded-lg border border-emerald-200/35 bg-emerald-200/15 px-3 py-1 text-xs font-medium text-emerald-50 hover:bg-emerald-200/25"

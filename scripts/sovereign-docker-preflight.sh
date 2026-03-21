@@ -9,8 +9,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 COMPOSE_FILE="$REPO_ROOT/docker-compose.yml"
 ENV_FILE="$REPO_ROOT/apps/sovereign/.env"
-DB_PORT="${SOVEREIGN_DB_PORT:-${SENTINELSQUAD_DB_PORT:-34765}}"
-APP_PORT="${SOVEREIGN_APP_PORT:-${SENTINELSQUAD_APP_PORT:-3577}}"
+DB_PORT="${SOVEREIGN_DB_PORT:-34765}"
+APP_PORT="${SOVEREIGN_APP_PORT:-3577}"
 
 PASS_COUNT=0
 FAIL_COUNT=0
@@ -60,7 +60,7 @@ check_any_github_token() {
   local file="$1"
   local s line l value compact
   s=0
-  for key in SOVEREIGN_GITHUB_TOKEN SENTINELSQUAD_GITHUB_TOKEN; do
+  for key in SOVEREIGN_GITHUB_TOKEN; do
     line="$(grep -E "^${key}=" "$file" | tail -1 || true)"
     if [ -z "$line" ]; then
       continue
@@ -73,7 +73,7 @@ check_any_github_token() {
       return
     fi
   done
-  fail "No non-empty SOVEREIGN_GITHUB_TOKEN or SENTINELSQUAD_GITHUB_TOKEN in apps/sovereign/.env. Remediation: set at least one for board/API features (use a placeholder for local Docker smoke tests)."
+  fail "No non-empty SOVEREIGN_GITHUB_TOKEN in apps/sovereign/.env. Remediation: set one for board/API features (use a placeholder for local Docker smoke tests)."
 }
 
 check_port_listener() {

@@ -57,17 +57,9 @@ function isoOrNull(value: Date | null | undefined) {
 }
 
 function staleRunningThresholdMs() {
-  const leaseTtl = Number(
-    process.env.SOVEREIGN_ORCHESTRATOR_LEASE_TTL_MS ||
-      process.env.SENTINELSQUAD_ORCHESTRATOR_LEASE_TTL_MS ||
-      "20000"
-  );
+  const leaseTtl = Number(process.env.SOVEREIGN_ORCHESTRATOR_LEASE_TTL_MS || "20000");
   const fallback = Math.max((Number.isFinite(leaseTtl) ? leaseTtl : 20_000) * 2, 30_000);
-  const raw = Number(
-    process.env.SOVEREIGN_ORCHESTRATOR_STALE_RUNNING_MS ||
-      process.env.SENTINELSQUAD_ORCHESTRATOR_STALE_RUNNING_MS ||
-      String(fallback)
-  );
+  const raw = Number(process.env.SOVEREIGN_ORCHESTRATOR_STALE_RUNNING_MS || String(fallback));
   if (!Number.isFinite(raw)) return fallback;
   return Math.min(Math.max(Math.trunc(raw), 5_000), 3_600_000);
 }

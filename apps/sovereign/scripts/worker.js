@@ -84,54 +84,30 @@ function argValue(prefix) {
   return found.slice(prefix.length + 1);
 }
 
-function envPreferSovereign(sovereignKey, legacyKey, fallback = undefined) {
-  const s = process.env[sovereignKey];
-  if (s !== undefined && String(s).length > 0) return s;
-  const l = process.env[legacyKey];
-  if (l !== undefined && String(l).length > 0) return l;
+function envKey(key, fallback = undefined) {
+  const v = process.env[key];
+  if (v !== undefined && String(v).length > 0) return v;
   return fallback;
 }
 
-function envBoolTrue(sovereignKey, legacyKey) {
-  return (
-    process.env[sovereignKey] === "true" || process.env[legacyKey] === "true"
-  );
+function envBoolTrue(key) {
+  return process.env[key] === "true";
 }
 
 function resolveProductSettingsPath() {
-  const root = path.join(__dirname, "..");
-  const next = path.join(root, ".sovereign", "settings.json");
-  const legacy = path.join(root, ".sentinelsquad", "settings.json");
-  try {
-    if (fs.existsSync(next)) return next;
-    if (fs.existsSync(legacy)) return legacy;
-  } catch {
-    // ignore
-  }
-  return next;
+  return path.join(path.join(__dirname, ".."), ".sovereign", "settings.json");
 }
 
 const RAW_AGENT_KEY =
   argValue("--agent") ||
-  envPreferSovereign(
-    "SOVEREIGN_WORKER_AGENT_KEY",
-    "SENTINELSQUAD_WORKER_AGENT_KEY"
-  ) ||
+  envKey("SOVEREIGN_WORKER_AGENT_KEY") ||
   null;
 const POLL_MS = Number(
-  envPreferSovereign(
-    "SOVEREIGN_WORKER_POLL_MS",
-    "SENTINELSQUAD_WORKER_POLL_MS",
-    "1200"
-  )
+  envKey("SOVEREIGN_WORKER_POLL_MS", "1200")
 );
-const WORKER_MODEL = envPreferSovereign(
-  "SOVEREIGN_WORKER_MODEL",
-  "SENTINELSQUAD_WORKER_MODEL",
-  null
-);
+const WORKER_MODEL = envKey("SOVEREIGN_WORKER_MODEL", null);
 const WORKER_HOST =
-  envPreferSovereign("SOVEREIGN_WORKER_HOST", "SENTINELSQUAD_WORKER_HOST") ||
+  envKey("SOVEREIGN_WORKER_HOST") ||
   os.hostname();
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434";
 const SOVEREIGN_EMBEDDING_MODEL =
@@ -142,38 +118,19 @@ const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL || "https://api.openai.com/v
 const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || null;
 const GITHUB_TOKEN =
-  envPreferSovereign("SOVEREIGN_GITHUB_TOKEN", "SENTINELSQUAD_GITHUB_TOKEN") ||
+  envKey("SOVEREIGN_GITHUB_TOKEN") ||
   process.env.GITHUB_TOKEN ||
   process.env.MVP_PROJECT_TOKEN ||
   null;
-const GITHUB_BOARD_ENABLED = envBoolTrue(
-  "SOVEREIGN_ENABLE_GITHUB_BOARD",
-  "SENTINELSQUAD_ENABLE_GITHUB_BOARD"
-);
+const GITHUB_BOARD_ENABLED = envBoolTrue("SOVEREIGN_ENABLE_GITHUB_BOARD");
 const GITHUB_PROJECT_OWNER =
-  envPreferSovereign(
-    "SOVEREIGN_GITHUB_PROJECT_OWNER",
-    "SENTINELSQUAD_GITHUB_PROJECT_OWNER",
-    "moldovancsaba"
-  );
+  envKey("SOVEREIGN_GITHUB_PROJECT_OWNER", "moldovancsaba");
 const GITHUB_REPO_OWNER =
-  envPreferSovereign(
-    "SOVEREIGN_GITHUB_REPO_OWNER",
-    "SENTINELSQUAD_GITHUB_REPO_OWNER",
-    "moldovancsaba"
-  );
+  envKey("SOVEREIGN_GITHUB_REPO_OWNER", "moldovancsaba");
 const GITHUB_REPO_NAME =
-  envPreferSovereign(
-    "SOVEREIGN_GITHUB_REPO_NAME",
-    "SENTINELSQUAD_GITHUB_REPO_NAME",
-    "sovereign"
-  );
+  envKey("SOVEREIGN_GITHUB_REPO_NAME", "sovereign");
 const GITHUB_PROJECT_NUMBER = Number(
-  envPreferSovereign(
-    "SOVEREIGN_GITHUB_PROJECT_NUMBER",
-    "SENTINELSQUAD_GITHUB_PROJECT_NUMBER",
-    "1"
-  )
+  envKey("SOVEREIGN_GITHUB_PROJECT_NUMBER", "1")
 );
 const SETTINGS_FILE = resolveProductSettingsPath();
 const LOCAL_MODEL_RESOLUTION_CACHE_TTL_MS = 15000;
@@ -192,146 +149,82 @@ const NOT_READY_REASON =
 const PAUSED_REASON =
   "Agent readiness is PAUSED. Task is queued and will execute after switching back to READY.";
 const DEFAULT_MAX_ATTEMPTS = Number(
-  envPreferSovereign(
-    "SOVEREIGN_TASK_MAX_ATTEMPTS",
-    "SENTINELSQUAD_TASK_MAX_ATTEMPTS",
-    "3"
-  )
+  envKey("SOVEREIGN_TASK_MAX_ATTEMPTS", "3")
 );
 const RETRY_BASE_MS = Number(
-  envPreferSovereign(
-    "SOVEREIGN_TASK_RETRY_BASE_MS",
-    "SENTINELSQUAD_TASK_RETRY_BASE_MS",
-    "5000"
-  )
+  envKey("SOVEREIGN_TASK_RETRY_BASE_MS", "5000")
 );
 const RETRY_MAX_MS = Number(
-  envPreferSovereign(
-    "SOVEREIGN_TASK_RETRY_MAX_MS",
-    "SENTINELSQUAD_TASK_RETRY_MAX_MS",
-    "300000"
-  )
+  envKey("SOVEREIGN_TASK_RETRY_MAX_MS", "300000")
 );
 const RETRY_JITTER_MS = Number(
-  envPreferSovereign(
-    "SOVEREIGN_TASK_RETRY_JITTER_MS",
-    "SENTINELSQUAD_TASK_RETRY_JITTER_MS",
-    "750"
-  )
+  envKey("SOVEREIGN_TASK_RETRY_JITTER_MS", "750")
 );
 const REQUEST_TIMEOUT_MS = Number(
-  envPreferSovereign(
-    "SOVEREIGN_WORKER_REQUEST_TIMEOUT_MS",
-    "SENTINELSQUAD_WORKER_REQUEST_TIMEOUT_MS",
-    "60000"
-  )
+  envKey("SOVEREIGN_WORKER_REQUEST_TIMEOUT_MS", "60000")
 );
 const SHELL_STREAM_FLUSH_CHARS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_SHELL_STREAM_FLUSH_CHARS",
-    "SENTINELSQUAD_SHELL_STREAM_FLUSH_CHARS",
-    "1200"
-  ),
+  envKey("SOVEREIGN_SHELL_STREAM_FLUSH_CHARS", "1200"),
   1200,
   200,
   4000
 );
 const SHELL_STREAM_MESSAGE_MAX_CHARS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_SHELL_STREAM_MESSAGE_MAX_CHARS",
-    "SENTINELSQUAD_SHELL_STREAM_MESSAGE_MAX_CHARS",
-    "1600"
-  ),
+  envKey("SOVEREIGN_SHELL_STREAM_MESSAGE_MAX_CHARS", "1600"),
   1600,
   200,
   6000
 );
 const SHELL_ARTIFACT_SNIPPET_MAX_CHARS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_SHELL_ARTIFACT_SNIPPET_MAX_CHARS",
-    "SENTINELSQUAD_SHELL_ARTIFACT_SNIPPET_MAX_CHARS",
-    "4000"
-  ),
+  envKey("SOVEREIGN_SHELL_ARTIFACT_SNIPPET_MAX_CHARS", "4000"),
   4000,
   500,
   24000
 );
 const ISSUE_EVIDENCE_MAX_ATTEMPTS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_ISSUE_EVIDENCE_MAX_ATTEMPTS",
-    "SENTINELSQUAD_ISSUE_EVIDENCE_MAX_ATTEMPTS",
-    "3"
-  ),
+  envKey("SOVEREIGN_ISSUE_EVIDENCE_MAX_ATTEMPTS", "3"),
   3,
   1,
   6
 );
 const ISSUE_EVIDENCE_RETRY_BASE_MS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_ISSUE_EVIDENCE_RETRY_BASE_MS",
-    "SENTINELSQUAD_ISSUE_EVIDENCE_RETRY_BASE_MS",
-    "1000"
-  ),
+  envKey("SOVEREIGN_ISSUE_EVIDENCE_RETRY_BASE_MS", "1000"),
   1000,
   250,
   60_000
 );
 const ISSUE_EVIDENCE_RETRY_MAX_MS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_ISSUE_EVIDENCE_RETRY_MAX_MS",
-    "SENTINELSQUAD_ISSUE_EVIDENCE_RETRY_MAX_MS",
-    "15000"
-  ),
+  envKey("SOVEREIGN_ISSUE_EVIDENCE_RETRY_MAX_MS", "15000"),
   15_000,
   ISSUE_EVIDENCE_RETRY_BASE_MS,
   300_000
 );
 const OUTPUT_DLP_MODE = resolveDlpMode(
-  envPreferSovereign("SOVEREIGN_DLP_MODE", "SENTINELSQUAD_DLP_MODE")
+  envKey("SOVEREIGN_DLP_MODE")
 );
 const ORCHESTRATOR_LEASE_ID =
-  envPreferSovereign(
-    "SOVEREIGN_ORCHESTRATOR_LEASE_ID",
-    "SENTINELSQUAD_ORCHESTRATOR_LEASE_ID",
-    "sovereign-primary-orchestrator"
-  );
+  envKey("SOVEREIGN_ORCHESTRATOR_LEASE_ID", "sovereign-primary-orchestrator");
 const ORCHESTRATOR_LEASE_TTL_MS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_ORCHESTRATOR_LEASE_TTL_MS",
-    "SENTINELSQUAD_ORCHESTRATOR_LEASE_TTL_MS",
-    "20000"
-  ),
+  envKey("SOVEREIGN_ORCHESTRATOR_LEASE_TTL_MS", "20000"),
   20_000,
   5_000,
   300_000
 );
 const ORCHESTRATOR_STALE_RUNNING_MS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_ORCHESTRATOR_STALE_RUNNING_MS",
-    "SENTINELSQUAD_ORCHESTRATOR_STALE_RUNNING_MS",
-    String(Math.max(ORCHESTRATOR_LEASE_TTL_MS * 2, 30_000))
-  ),
+  envKey("SOVEREIGN_ORCHESTRATOR_STALE_RUNNING_MS", String(Math.max(ORCHESTRATOR_LEASE_TTL_MS * 2, 30_000))),
   Math.max(ORCHESTRATOR_LEASE_TTL_MS * 2, 30_000),
   ORCHESTRATOR_LEASE_TTL_MS,
   3_600_000
 );
 const HANDOFF_INFERRED_MAX = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_HANDOFF_INFERRED_MAX",
-    "SENTINELSQUAD_HANDOFF_INFERRED_MAX",
-    "3"
-  ),
+  envKey("SOVEREIGN_HANDOFF_INFERRED_MAX", "3"),
   3,
   1,
   10
 );
 const STRICT_ORCHESTRATION = strictConfigFromEnv();
 const DRIFT_STATUS_CACHE_TTL_MS = clampInt(
-  envPreferSovereign(
-    "SOVEREIGN_DRIFT_STATUS_CACHE_TTL_MS",
-    "SENTINELSQUAD_DRIFT_STATUS_CACHE_TTL_MS",
-    "15000"
-  ),
+  envKey("SOVEREIGN_DRIFT_STATUS_CACHE_TTL_MS", "15000"),
   15_000,
   1_000,
   300_000
@@ -2080,7 +1973,7 @@ async function fetchWithTimeout(url, init, provider, timeoutOverrideMs) {
 async function ghGraphQL(query, variables) {
   if (!GITHUB_TOKEN) {
     throw new Error(
-      "Missing GitHub token for board grounding. Set SOVEREIGN_GITHUB_TOKEN or SENTINELSQUAD_GITHUB_TOKEN."
+      "Missing GitHub token for board grounding. Set SOVEREIGN_GITHUB_TOKEN."
     );
   }
   const res = await fetch("https://api.github.com/graphql", {
@@ -2119,7 +2012,7 @@ async function readIssueBoardStatus(issueNumber) {
       ok: false,
       code: "TOKEN_MISSING",
       statusName: null,
-      reason: "SENTINELSQUAD_GITHUB_TOKEN is required for board/runtime drift checks."
+      reason: "SOVEREIGN_GITHUB_TOKEN is required for board/runtime drift checks."
     };
   }
 
@@ -2528,7 +2421,7 @@ async function publishRuntimeIssueEvidence(params) {
       fromState: task.status,
       toState: task.status,
       allowed: false,
-      reason: "Issue evidence posting failed: SENTINELSQUAD_GITHUB_TOKEN is missing.",
+      reason: "Issue evidence posting failed: SOVEREIGN_GITHUB_TOKEN is missing.",
       metadata: {
         ...metadataBase,
         code: "TOKEN_MISSING"
@@ -5256,7 +5149,7 @@ process.on("SIGTERM", () => requestShutdown("SIGTERM"));
 async function loop() {
   if (!RAW_AGENT_KEY) {
     throw new Error(
-      "SOVEREIGN_WORKER_AGENT_KEY or SENTINELSQUAD_WORKER_AGENT_KEY is required for control-plane worker startup and must reference an ALPHA agent."
+      "SOVEREIGN_WORKER_AGENT_KEY is required for control-plane worker startup and must reference an ALPHA agent."
     );
   }
   WORKER_AGENT_KEY = await resolveCanonicalAgentKey(RAW_AGENT_KEY);

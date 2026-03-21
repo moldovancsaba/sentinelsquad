@@ -43,14 +43,8 @@ export default async function DashboardPage() {
   const session = await requireSession();
   if (!session) redirect("/signin");
 
-  const githubBoardEnabled =
-    process.env.SOVEREIGN_ENABLE_GITHUB_BOARD === "true" ||
-    process.env.SENTINELSQUAD_ENABLE_GITHUB_BOARD === "true";
-  const dashboardProduct = (
-    process.env.SOVEREIGN_DASHBOARD_PRODUCT ||
-    process.env.SENTINELSQUAD_DASHBOARD_PRODUCT ||
-    "sovereign"
-  ).trim();
+  const githubBoardEnabled = process.env.SOVEREIGN_ENABLE_GITHUB_BOARD === "true";
+  const dashboardProduct = (process.env.SOVEREIGN_DASHBOARD_PRODUCT || "sovereign").trim();
   let meta: Awaited<ReturnType<typeof getProjectMeta>> | null = null;
   let items: ProjectItem[] = [];
   let emailEvents: Array<{

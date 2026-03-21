@@ -5,8 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { requireRbacAccess } from "@/lib/rbac";
 import {
   getActiveTasteRubricVersion,
-  readSentinelSquadSettings,
-  writeSentinelSquadSettings
+  readSovereignSettings,
+  writeSovereignSettings
 } from "@/lib/settings-store";
 import {
   parseTasteRubricPrinciples,
@@ -26,8 +26,8 @@ export async function saveLocalProjectFolderAction(formData: FormData) {
     throw new Error("Local project folder is required.");
   }
 
-  const settings = await readSentinelSquadSettings();
-  await writeSentinelSquadSettings({
+  const settings = await readSovereignSettings();
+  await writeSovereignSettings({
     ...settings,
     localProjectFolder
   });
@@ -55,7 +55,7 @@ export async function saveTasteRubricAction(formData: FormData) {
   if (!ownerEmail) throw new Error("Taste rubric owner email is required.");
   if (!principles.length) throw new Error("Taste rubric principles are required.");
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const currentOwner =
     getActiveTasteRubricVersion(settings)?.ownerEmail?.toLowerCase() || null;
   const actorEmail = auth.userEmail?.toLowerCase() || null;
@@ -114,8 +114,8 @@ export async function saveShellAccessSettingsAction(formData: FormData) {
     throw new Error("Default shell cwd is required.");
   }
 
-  const settings = await readSentinelSquadSettings();
-  await writeSentinelSquadSettings({
+  const settings = await readSovereignSettings();
+  await writeSovereignSettings({
     ...settings,
     shellAccess: {
       inheritFullProcessEnv,
@@ -134,7 +134,7 @@ export async function saveCommandAccessPolicyAction(formData: FormData) {
     entityId: "command-access"
   });
 
-  const settings = await readSentinelSquadSettings();
+  const settings = await readSovereignSettings();
   const entries = new Map(
     settings.commandAccess.map((entry) => [entry.command.toLowerCase(), entry])
   );
@@ -163,7 +163,7 @@ export async function saveCommandAccessPolicyAction(formData: FormData) {
     });
   }
 
-  await writeSentinelSquadSettings({
+  await writeSovereignSettings({
     ...settings,
     commandAccess: Array.from(entries.values()).sort((a, b) =>
       a.command.localeCompare(b.command)

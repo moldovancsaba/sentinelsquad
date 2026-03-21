@@ -66,19 +66,17 @@ function isoOrNull(value) {
   return new Date(parsed).toISOString();
 }
 
-function envMem(env, sovereignKey, legacyKey, fallback, min, max) {
-  const raw = env[sovereignKey] ?? env[legacyKey];
-  return clampInt(raw, fallback, min, max);
+function envMem(env, key, fallback, min, max) {
+  return clampInt(env[key], fallback, min, max);
 }
 
 function resolveTaskMemoryConfig(env = process.env) {
-  const queryMaxChars = envMem(env, "SOVEREIGN_MEMORY_QUERY_MAX_CHARS", "SENTINELSQUAD_MEMORY_QUERY_MAX_CHARS", 280, 80, 600);
-  const defaultDocumentLimit = envMem(env, "SOVEREIGN_MEMORY_DOCUMENT_LIMIT", "SENTINELSQUAD_MEMORY_DOCUMENT_LIMIT", 80, 10, 200);
-  const defaultMaxSnippets = envMem(env, "SOVEREIGN_MEMORY_DEFAULT_MAX_SNIPPETS", "SENTINELSQUAD_MEMORY_DEFAULT_MAX_SNIPPETS", 4, 1, 8);
+  const queryMaxChars = envMem(env, "SOVEREIGN_MEMORY_QUERY_MAX_CHARS", 280, 80, 600);
+  const defaultDocumentLimit = envMem(env, "SOVEREIGN_MEMORY_DOCUMENT_LIMIT", 80, 10, 200);
+  const defaultMaxSnippets = envMem(env, "SOVEREIGN_MEMORY_DEFAULT_MAX_SNIPPETS", 4, 1, 8);
   const defaultSnippetMaxChars = envMem(
     env,
     "SOVEREIGN_MEMORY_DEFAULT_SNIPPET_MAX_CHARS",
-    "SENTINELSQUAD_MEMORY_DEFAULT_SNIPPET_MAX_CHARS",
     320,
     80,
     800
@@ -86,7 +84,6 @@ function resolveTaskMemoryConfig(env = process.env) {
   const indexDocumentMaxChars = envMem(
     env,
     "SOVEREIGN_MEMORY_INDEX_DOC_MAX_CHARS",
-    "SENTINELSQUAD_MEMORY_INDEX_DOC_MAX_CHARS",
     1200,
     120,
     4000

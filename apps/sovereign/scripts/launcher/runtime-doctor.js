@@ -11,7 +11,7 @@ const {
 async function main() {
   const endpoint = String(process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434").trim();
   const requestedModel = String(
-    process.env.SENTINELSQUAD_WORKER_MODEL || process.env.OLLAMA_MODEL || "Granite-4.0-H-1B"
+    process.env.SOVEREIGN_WORKER_MODEL || process.env.OLLAMA_MODEL || "Granite-4.0-H-1B"
   ).trim();
 
   const installedModels = await listInstalledLocalModels({

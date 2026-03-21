@@ -26,6 +26,7 @@ This is the navigation hub for `{sovereign}` documentation.
 - [architecture/0003-local-backlog-and-po-experience.md](architecture/0003-local-backlog-and-po-experience.md)
 - [architecture/0004-memory-pgvector-embedding.md](architecture/0004-memory-pgvector-embedding.md)
 - [architecture/theia-upstream-and-future-proof.md](architecture/theia-upstream-and-future-proof.md)
+- [architecture/HYBRID_ORCHESTRATOR_SPEC_V1.md](architecture/HYBRID_ORCHESTRATOR_SPEC_V1.md) — hybrid orchestrator v1 (fixed weights + UCGS; implementation in `apps/sovereign/src/lib/hybrid-orchestrator`)
 - [SOVEREIGN_DELIVERY_ROADMAP.md](SOVEREIGN_DELIVERY_ROADMAP.md)
 
 ## Operator And Setup Docs

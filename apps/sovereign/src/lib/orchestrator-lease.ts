@@ -26,11 +26,7 @@ export type OrchestratorLeaseSnapshot = {
 };
 
 function leaseTtlMs() {
-  const raw = Number(
-    process.env.SOVEREIGN_ORCHESTRATOR_LEASE_TTL_MS ||
-      process.env.SENTINELSQUAD_ORCHESTRATOR_LEASE_TTL_MS ||
-      "20000"
-  );
+  const raw = Number(process.env.SOVEREIGN_ORCHESTRATOR_LEASE_TTL_MS || "20000");
   if (!Number.isFinite(raw)) return 20_000;
   return Math.min(Math.max(Math.trunc(raw), 5_000), 300_000);
 }

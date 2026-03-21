@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { ChatEvent, ChatMessage, User } from "../../node_modules/.prisma/client";
+import type { ChatEvent, ChatMessage, User } from "@prisma/client";
 
 type ThreadEventPayload = Record<string, unknown> | null;
 

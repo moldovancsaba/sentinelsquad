@@ -6,7 +6,7 @@ import {
   saveProjectConfigAction
 } from "@/app/products/actions";
 import { listProjectItems } from "@/lib/github";
-import { readSentinelSquadSettings } from "@/lib/settings-store";
+import { readSovereignSettings } from "@/lib/settings-store";
 import { requireSession } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,7 @@ export default async function ProductPage(props: {
   const decoded = decodeURIComponent(product);
   const [items, settings] = await Promise.all([
     listProjectItems({ product: decoded, limit: 200 }),
-    readSentinelSquadSettings()
+    readSovereignSettings()
   ]);
   const config =
     settings.projects.find((p) => p.projectName.toLowerCase() === decoded.toLowerCase()) ||

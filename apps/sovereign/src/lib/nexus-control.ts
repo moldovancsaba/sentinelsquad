@@ -11,15 +11,9 @@ export type NexusRoleMapping = {
 
 export function getNexusRoleMapping(): NexusRoleMapping {
   return {
-    drafterKey: String(
-      sovereignEnvDefault("SOVEREIGN_ORCH_DRAFTER_KEY", "SENTINELSQUAD_ORCH_DRAFTER_KEY", "Drafter")
-    ).trim(),
-    writerKey: String(
-      sovereignEnvDefault("SOVEREIGN_ORCH_WRITER_KEY", "SENTINELSQUAD_ORCH_WRITER_KEY", "Writer")
-    ).trim(),
-    controllerKey: String(
-      sovereignEnvDefault("SOVEREIGN_ORCH_CONTROLLER_KEY", "SENTINELSQUAD_ORCH_CONTROLLER_KEY", "Controller")
-    ).trim()
+    drafterKey: String(sovereignEnvDefault("SOVEREIGN_ORCH_DRAFTER_KEY", "Drafter")).trim(),
+    writerKey: String(sovereignEnvDefault("SOVEREIGN_ORCH_WRITER_KEY", "Writer")).trim(),
+    controllerKey: String(sovereignEnvDefault("SOVEREIGN_ORCH_CONTROLLER_KEY", "Controller")).trim()
   };
 }
 
@@ -27,7 +21,6 @@ export function getExternalWorkflowRuntimePath() {
   return String(
     sovereignEnvDefault(
       "SOVEREIGN_CHATDEV_PATH",
-      "SENTINELSQUAD_CHATDEV_PATH",
       path.resolve(process.cwd(), "..", "..", "external", "ChatDev")
     )
   ).trim();
@@ -36,17 +29,12 @@ export function getExternalWorkflowRuntimePath() {
 export function getOrchestrationBenchmarkWorkflowPath() {
   return String(
     process.env.SOVEREIGN_CHATDEV_WORKFLOW_PATH ||
-      process.env.SENTINELSQUAD_CHATDEV_WORKFLOW_PATH ||
       path.join(getExternalWorkflowRuntimePath(), "yaml_instance", "nexus_controller_seminar.yaml")
   ).trim();
 }
 
 export function getNexusRunArtifactPath() {
-  const next = path.resolve(process.cwd(), ".sovereign", "nexus-last-run.json");
-  const legacy = path.resolve(process.cwd(), ".sentinelsquad", "nexus-last-run.json");
-  if (fsSync.existsSync(next)) return next;
-  if (fsSync.existsSync(legacy)) return legacy;
-  return next;
+  return path.resolve(process.cwd(), ".sovereign", "nexus-last-run.json");
 }
 
 export async function readNexusRunArtifact() {

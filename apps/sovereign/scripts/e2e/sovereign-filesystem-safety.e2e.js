@@ -291,7 +291,7 @@ async function main() {
   try {
     const context = await resolveFilesystemToolContext({
       cwd: workspaceRoot,
-      env: { SOVEREIGN_WORKSPACE_ROOT: workspaceRoot, SENTINELSQUAD_WORKSPACE_ROOT: workspaceRoot }
+      env: { SOVEREIGN_WORKSPACE_ROOT: workspaceRoot }
     });
     summary.stages.happyPath = await stageHappyPaths(context);
     summary.stages.safetyDenials = await stageSafetyDenials(context, workspaceRoot, outsideRoot);

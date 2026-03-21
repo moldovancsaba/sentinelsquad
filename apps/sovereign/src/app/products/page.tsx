@@ -2,11 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Shell } from "@/components/Shell";
 import {
-  bootstrapSentinelSquadProjectAction,
+  bootstrapSovereignProjectAction,
   cleanProjectSettingsAction
 } from "@/app/products/actions";
 import { getProjectMeta, listProjectItems } from "@/lib/github";
-import { readSentinelSquadSettings } from "@/lib/settings-store";
+import { readSovereignSettings } from "@/lib/settings-store";
 import { requireSession } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
@@ -15,10 +15,8 @@ export default async function ProductsPage() {
   const session = await requireSession();
   if (!session) redirect("/signin");
 
-  const settings = await readSentinelSquadSettings();
-  const planningSyncEnabled =
-    process.env.SOVEREIGN_ENABLE_GITHUB_BOARD === "true" ||
-    process.env.SENTINELSQUAD_ENABLE_GITHUB_BOARD === "true";
+  const settings = await readSovereignSettings();
+  const planningSyncEnabled = process.env.SOVEREIGN_ENABLE_GITHUB_BOARD === "true";
   let products: string[] = [];
   let boardItems:
     | Array<{
@@ -150,7 +148,7 @@ export default async function ProductsPage() {
                 Clean Local Project Config
               </button>
             </form>
-            <form action={bootstrapSentinelSquadProjectAction}>
+            <form action={bootstrapSovereignProjectAction}>
               <button
                 type="submit"
                 className="rounded-xl border border-emerald-300/25 bg-emerald-200/10 px-3 py-1.5 text-xs font-medium text-emerald-50 hover:bg-emerald-200/20"

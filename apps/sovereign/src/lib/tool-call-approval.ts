@@ -28,17 +28,15 @@ export type VerifyToolCallApprovalTokenResult =
   | { ok: false; code: string; reason: string; tokenId: string | null };
 
 function readSecret(explicit?: string): string {
-  const secret =
-    (
-      explicit ||
-      process.env.SOVEREIGN_TOOL_APPROVAL_SECRET ||
-      process.env.SENTINELSQUAD_TOOL_APPROVAL_SECRET ||
-      process.env.NEXTAUTH_SECRET ||
-      ""
-    ).trim();
+  const secret = (
+    explicit ||
+    process.env.SOVEREIGN_TOOL_APPROVAL_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    ""
+  ).trim();
   if (!secret) {
     throw new Error(
-      "Tool approval secret is not configured. Set SOVEREIGN_TOOL_APPROVAL_SECRET (or legacy SENTINELSQUAD_TOOL_APPROVAL_SECRET or NEXTAUTH_SECRET)."
+      "Tool approval secret is not configured. Set SOVEREIGN_TOOL_APPROVAL_SECRET or NEXTAUTH_SECRET."
     );
   }
   return secret;

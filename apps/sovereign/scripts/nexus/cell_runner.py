@@ -22,19 +22,13 @@ FALLBACK_DRAFTER_MODEL = os.environ.get("NEXUS_DRAFTER_FALLBACK_MODEL", "llama3.
 CHATDEV_PATH = Path(
     os.environ.get(
         "SOVEREIGN_CHATDEV_PATH",
-        os.environ.get(
-            "SENTINELSQUAD_CHATDEV_PATH",
-            str((ROOT.parents[1] / "external" / "ChatDev").resolve()),
-        ),
+        str((ROOT.parents[1] / "external" / "ChatDev").resolve()),
     )
 )
 CHATDEV_WORKFLOW = Path(
     os.environ.get(
         "SOVEREIGN_CHATDEV_WORKFLOW_PATH",
-        os.environ.get(
-            "SENTINELSQUAD_CHATDEV_WORKFLOW_PATH",
-            str((NEXUS_DIR / "chatdev_dev_team.yaml").resolve()),
-        ),
+        str((NEXUS_DIR / "chatdev_dev_team.yaml").resolve()),
     )
 )
 ARTIFACT_DIR = APP_ROOT / ".sovereign" / "nexus"
