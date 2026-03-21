@@ -46,13 +46,13 @@ These issues are **real portfolio work** for the same product but are **not** ro
 | [#433](https://github.com/moldovancsaba/mvp-factory-control/issues/433) | Memory annotation, review, and knowledge-curation workflow | Builds on LLD-006 foundation; see [HANDOVER.md](../HANDOVER.md) “Partially implemented” |
 | [#436](https://github.com/moldovancsaba/mvp-factory-control/issues/436) | Optional: circuit breaker for model backends | Operational resilience; complements LLD-010 |
 
-### 2.2 Repo-first shipments pending a board mirror
+### 2.2 Repo-first shipments (board mirror for PO sign-off)
 
-Work **merged to [sovereign](https://github.com/moldovancsaba/sovereign) `main`** that does **not** yet have a dedicated **mvp-factory-control** issue (or Projects card) for PO acceptance. **Action:** Product Owner opens an issue using the [generic template](SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md#generic-template-if-you-need-a-new-lld-later), links this SSOT row + spec, defines AC, adds the card to the [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1), then pastes the issue link **in the table below** (replace “TBD”).
+Work **merged to [sovereign](https://github.com/moldovancsaba/sovereign) `main`** that uses a **dedicated mvp-factory-control issue** for Product Owner acceptance (and a card on [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1)). **When adding a new repo-first shipment:** open an issue (see [generic template](SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md#generic-template-if-you-need-a-new-lld-later)), add the project card, then add a row here and in §4.2.
 
 | Shipment | Spec / entrypoints | Board issue |
 |----------|-------------------|-------------|
-| **Hybrid orchestrator v1** | [HYBRID_ORCHESTRATOR_SPEC_V1.md](architecture/HYBRID_ORCHESTRATOR_SPEC_V1.md); `apps/sovereign/src/lib/hybrid-orchestrator/`; `POST /api/orchestrator/hybrid` | **TBD** — create + link |
+| **Hybrid orchestrator v1** | [HYBRID_ORCHESTRATOR_SPEC_V1.md](architecture/HYBRID_ORCHESTRATOR_SPEC_V1.md); `apps/sovereign/src/lib/hybrid-orchestrator/`; `POST /api/orchestrator/hybrid` | [#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447) |
 
 ---
 
@@ -69,11 +69,11 @@ Work **merged to [sovereign](https://github.com/moldovancsaba/sovereign) `main`*
 
 Use this when moving work from **idea → shipped code → board truth**.
 
-1. **Pick the track:** Next **LLD** from §2 / §4.1 (open rows), **extended** item from §2.1 / §4.2, or **close a gap** in §2.2 (create the board issue, then define AC).
+1. **Pick the track:** Next **LLD** from §2 / §4.1 (open rows), **extended** item from §2.1 / §4.2, or **repo-first** item from §2.2 / §4.2 (PO sign-off on [#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447) etc.).
 2. **Plan on the board:** Ensure an issue exists on **mvp-factory-control** and (if you use it) a card on [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1). Issue body should link **this SSOT** and, for LLDs, **[Master Plan Part C](SOVEREIGN_MASTER_PLAN_AND_LLD.md#part-c-deliverable-issues-lld)** or the [issue template](SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md) paste.
 3. **Implement** in **[moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign):** branch from `main`, merge via PR or direct push per your practice, run **`npm run verify`** (or validation named in the issue / Master Plan).
 4. **Handover:** Append **[HANDOVER.md](../HANDOVER.md)** handover log (READMEDEV **70 PROTOCOL**); update **Implemented Now** / **Partially Implemented** if user-visible behaviour changed.
-5. **Sync SSOT:** Tick **§4.1** for the LLD when PO accepts; update **§4.2** notes for extended issues; for §2.2 rows, **replace TBD** with the new issue link when created.
+5. **Sync SSOT:** Tick **§4.1** for the LLD when PO accepts; update **§4.2** notes for extended and repo-first issues; for new §2.2 rows, add the issue link and project card when created.
 6. **Close the loop on GitHub:** Close the **mvp-factory-control** issue (or comment engineering vs PO AC); align the **Projects** column with reality.
 
 ### 3.3 When the board, SSOT, and repo disagree
@@ -82,14 +82,14 @@ Use this when moving work from **idea → shipped code → board truth**.
 |-----------|-----------------------------------|-----|
 | Issue closed but §4.1 still ☐ | SSOT should follow accepted work | Tick §4.1; ensure HANDOVER matches |
 | §4.1 ☑ but issue still open | Usually issue should close | Close issue or reopen §4.1 with comment |
-| Code on `main` not on board | §2.2 | Create issue + link; then PO sign-off |
+| Code on `main` not on board | §2.2 | Create issue + §2.2/§4.2 row + project card; then PO sign-off |
 | Open board issue not listed in §2.1 | SSOT incomplete | Add §2.1 + §4.2 row |
 
 ### 3.1 MVP Factory Board (GitHub Projects)
 
 - **Live project:** [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1) — GitHub Projects **#1** on account **moldovancsaba** (portfolio board; many items are other products).
 - **Filter for `{sovereign}`:** Use the board **Product** field (or search titles) so control-plane work is not mixed with Amanoba, `{reply}`, `{hatori}`, MessMass, etc.
-- **LLD issue numbers (#437–#446):** Opened in **[moldovancsaba/mvp-factory-control](https://github.com/moldovancsaba/mvp-factory-control)** (planning repo), not in [moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign) (implementation repo). Extended `{sovereign}` issues **#432, #433, #436** are also planning-only; see §2.1.
+- **LLD issue numbers (#437–#446):** Opened in **[moldovancsaba/mvp-factory-control](https://github.com/moldovancsaba/mvp-factory-control)** (planning repo), not in [moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign) (implementation repo). Extended `{sovereign}` issues **#432, #433, #436** — §2.1. **Repo-first PO acceptance:** **#447** (hybrid orchestrator v1) — §2.2.
 - **Board vs SSOT:** §4.1 is the **planned** done/not-done view for **LLDs**. **GitHub issue state** should match §4.1 after each release (LLD-001…006 closed **2026-03-21** and match ☑; **#437** comment documents intentional legacy grep hits). **§4.2** tracks extended issues — use **Open/Closed** on GitHub as the live state and keep notes here in sync when priorities change.
 - **Copy hygiene:** Issue bodies that used the `{sentinelsquad}` placeholder were batch-updated to `{sovereign}` on **mvp-factory-control** (2026-03-21), except where the text intentionally documents legacy strings.
 
@@ -121,7 +121,7 @@ Use this to track that the plan is reflected on the board and to tick off comple
 | OSS hardening | [#432](https://github.com/moldovancsaba/mvp-factory-control/issues/432) | Open | Align with [HANDOVER.md](../HANDOVER.md) “first-public OSS packaging polish” |
 | Memory curation | [#433](https://github.com/moldovancsaba/mvp-factory-control/issues/433) | Open | Post–LLD-006 UX and workflows |
 | Circuit breaker | [#436](https://github.com/moldovancsaba/mvp-factory-control/issues/436) | Open | Optional; tie acceptance to runtime metrics / failure modes |
-| Hybrid orchestrator v1 | §2.2 (**TBD**) | Code on `main`; issue **not** created yet | Create issue; reference spec + `npm run verify`; define API/integration AC |
+| Hybrid orchestrator v1 | [#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447) | Open | PO sign-off per issue AC; card on [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1); `npm run verify` + API smoke |
 
 ---
 

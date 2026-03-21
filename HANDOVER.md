@@ -55,7 +55,7 @@
 ## Operator Truth
 
 - GitHub is optional for runtime.
-- **Delivery planning SSOT:** [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) — LLDs **#437–#446**, extended `{sovereign}` issues **#432, #433, #436**, and **§3.2** end-to-end delivery steps. **Implementation SSOT:** this repo (`main`).
+- **Delivery planning SSOT:** [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) — LLDs **#437–#446**, extended `{sovereign}` **#432, #433, #436**, hybrid PO acceptance **[#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447)**; **§3.2** end-to-end delivery steps. **Implementation SSOT:** this repo (`main`).
 - This repository is the implementation and documentation source for the product.
 
 ---
@@ -83,7 +83,7 @@ node scripts/mcp-backlog-server.js   # then send one JSON-RPC line to stdin, e.g
 ## Next Priority
 
 1. **Next LLDs:** **LLD-007**–**LLD-010** — per [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) §2 and §4.1 ([#443](https://github.com/moldovancsaba/mvp-factory-control/issues/443)–[#446](https://github.com/moldovancsaba/mvp-factory-control/issues/446)).
-2. **Board + repo alignment:** Create a **mvp-factory-control** issue for **hybrid orchestrator v1** (link spec + AC), add to the board, then update SSOT §2.2 / §4.2 — see SSOT **§3.2**. Extended backlog **#432, #433, #436** are listed in SSOT **§2.1**.
+2. **Hybrid v1 PO sign-off:** [mvp-factory-control#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447) (on [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1)) — close when AC met; SSOT §2.2 / §4.2 updated. Extended backlog **#432, #433, #436** — SSOT **§2.1**.
 3. ~~Implement and automate daily sub-tasks~~ Done: see **Run** (/run). Otherwise: in the application (e.g. “How to run the MCP server” and similar operator flows).
 4. After each merge to `main`: HANDOVER log (**70 PROTOCOL**) + SSOT checklist if an LLD or extended item progressed.
 
@@ -93,6 +93,7 @@ node scripts/mcp-backlog-server.js   # then send one JSON-RPC line to stdin, e.g
 
 Each entry below is appended per READMEDEV rule 13. Format: timestamp + agent label, branch/commit, objective, what changed, files touched, validation, known issues/next actions.
 
+- **2026-03-23 (local)** — **Board mirror for hybrid orchestrator v1:** Opened [mvp-factory-control#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447) (PO acceptance + AC); added to **MVP Factory Board** (GitHub Projects #1). Updated [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) §2.2, §3.1, §4.2; [HANDOVER.md](HANDOVER.md) operator truth + Next Priority. **Validation:** `gh issue view` / `gh project item-add` spot-check.
 - **2026-03-22 (local)** — **Sovereign cutover + hybrid orchestrator v1 (`main` `4b5e784`):** Shipped to **origin/main**. Removed intentional SentinelSquad compat: single dev auth path, `SOVEREIGN_*` env surface (no dual fallbacks where cut), MCP tool name `sovereign.tool-call` only, `.sovereign` settings paths, RBAC / `strict-orchestration` and related renames. **Hybrid v1:** [docs/architecture/HYBRID_ORCHESTRATOR_SPEC_V1.md](docs/architecture/HYBRID_ORCHESTRATOR_SPEC_V1.md); `apps/sovereign/src/lib/hybrid-orchestrator/*`; `POST /api/orchestrator/hybrid`. **Fix:** `thread-events` Prisma import → `@prisma/client`. Docs touch: WIKI, HANDOVER (LLD-001 / board text). **Validation:** `npm run verify` before push. **Next:** Migrate any lingering local env/settings from legacy names; run hybrid API integration or simulation passes; keep [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) aligned with shipped state.
 - **2026-03-21 (local)** — **Rollout ergonomics:** Root \`npm run prisma:migrate:deploy\`; SETUP/BUILD_AND_RUN/README/HANDOVER document deploy vs dev; Docker portability workflow retriggers on root \`package.json\` changes.
 - **2026-03-21 (local)** — **Prisma migrate deploy:** Applied \`20260321103000_project_memory_embedding_hnsw\` (HNSW on \`ProjectMemory.embedding\`) to local Postgres at \`localhost:34765\`.
