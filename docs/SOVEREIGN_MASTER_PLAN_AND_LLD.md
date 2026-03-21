@@ -189,7 +189,7 @@ Each block below is a **single deliverable issue**. Copy to mvp-factory-control 
 | **Validation** | Manual MCP read; optional ingestion run. |
 | **Target repo** | This repo (or separate ops repo). **Implementation surfaces:** MCP server for docs; wiki deploy doc; optional ingest script. |
 
-**Implementation note (2026-03):** Repo-first slice: `npm run mcp:docs` exposes `doc://runbooks/getting-started` (and SSOT) from filesystem; `docker-compose.wiki.yml` + `docs/setup/WIKI_SELF_HOSTED.md` cover optional BookStack. Remaining for full AC: MCP reads from live wiki API; optional ingestion to `ProjectMemory`.
+**Implementation note (2026-03):** `npm run mcp:docs` — repo URIs plus optional **BookStack** (`SOVEREIGN_WIKI_*`): `resources/list` merges API pages; `resources/read` for `doc://wiki/bookstack/page/{id}` uses export/markdown. `docker-compose.wiki.yml` + `docs/setup/WIKI_SELF_HOSTED.md`. **Ingest:** `npm run wiki:ingest-page -- --page-id=… --project-session-id=…`. Remaining: Outline adapter; PO sign-off on [#443](https://github.com/moldovancsaba/mvp-factory-control/issues/443).
 
 ---
 

@@ -26,13 +26,46 @@ npm run mcp:docs
 
 Send JSON-RPC lines on stdin, e.g. `resources/list` and `resources/read` with `params.uri` set to a listed URI.
 
-## 3. Remote wiki bridge (follow-up)
+## 3. API token (BookStack)
 
-Reading live pages from BookStack via MCP (HTTP API + token) is **not** implemented in the first slice. When added:
+1. In BookStack, open your user profile → **API Tokens** → create a token (save **Token ID** and **Token Secret**).
+2. Ensure the user’s role has **Access system API** (and permission to read the shelves/books/pages you need).
 
-- Document `SOVEREIGN_WIKI_BASE_URL` and API token env vars here.
-- Extend `mcp-docs-server.js` or add a thin adapter that maps `doc://…` to wiki page IDs or slugs.
+## 4. MCP docs + live wiki (`apps/sovereign/.env`)
 
-## 4. Optional ingestion to project memory
+Set:
 
-LLD-007 optional AC: ingest selected wiki pages into `ProjectMemory` with `sourceUrl`. That can be a scheduled script calling the existing memory APIs — track in [mvp-factory-control#443](https://github.com/moldovancsaba/mvp-factory-control/issues/443).
+| Variable | Example |
+|----------|---------|
+| `SOVEREIGN_WIKI_TYPE` | `bookstack` (default) |
+| `SOVEREIGN_WIKI_BASE_URL` | `http://127.0.0.1:6875` (no trailing slash) |
+| `SOVEREIGN_WIKI_TOKEN_ID` | from BookStack |
+| `SOVEREIGN_WIKI_TOKEN_SECRET` | from BookStack |
+| `SOVEREIGN_WIKI_MCP_PAGE_LIMIT` | optional, default `60` (max 200) — how many pages appear in `resources/list` |
+
+Restart **`npm run mcp:docs`**. Then:
+
+- **Static** URIs unchanged: `doc://runbooks/getting-started`, `doc://project/ssot-board`.
+- **Wiki** URIs: `doc://wiki/bookstack/page/{numericId}` (IDs come from BookStack’s API / UI).
+
+`resources/read` uses **`GET /api/pages/{id}/export/markdown`** when available; otherwise it falls back to the page JSON `markdown` / `html` fields.
+
+If the wiki is down or the token is invalid, `resources/read` returns a JSON-RPC error (`-32002`) with details; `resources/list` still returns repo files and may omit wiki pages (check stderr for list errors).
+
+## 5. Ingest a page into `ProjectMemory`
+
+Creates a **PO_PRODUCT** row with `sourceKind=bookstack` and `sourceUrl` pointing at the public page URL.
+
+```bash
+cd apps/sovereign
+# Dry run (no DB write):
+node scripts/ingest-wiki-to-memory.js --page-id=123 --project-session-id=<your-session-cuid> --dry-run
+# Write:
+npm run wiki:ingest-page -- --page-id=123 --project-session-id=<your-session-cuid>
+```
+
+Requires **`DATABASE_URL`** and the same BookStack env vars as above. Use a **project session id** from your running app (e.g. active product session).
+
+## 6. Outline / other engines
+
+Only **BookStack** is wired today (`SOVEREIGN_WIKI_TYPE=bookstack`). Other types are ignored until an adapter exists.

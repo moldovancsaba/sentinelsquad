@@ -70,7 +70,8 @@ const FLOWS: Array<{
       "npm run mcp:docs"
     ],
     cwd: "apps/sovereign",
-    notes: "Send JSON-RPC lines on stdin: resources/list, resources/read with params.uri. Override repo root with SOVEREIGN_DOCS_REPO_ROOT if needed."
+    notes:
+      "Send JSON-RPC lines on stdin: resources/list, resources/read with params.uri. Override repo root with SOVEREIGN_DOCS_REPO_ROOT. For live BookStack pages, set SOVEREIGN_WIKI_BASE_URL + TOKEN_ID + TOKEN_SECRET (see docs/setup/WIKI_SELF_HOSTED.md); URIs doc://wiki/bookstack/page/{id}."
   },
   {
     title: "Run database migrations",
