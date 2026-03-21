@@ -129,6 +129,19 @@ Use this to track that the plan is reflected on the board and to tick off comple
 | Operator-agnostic paths | [#449](https://github.com/moldovancsaba/mvp-factory-control/issues/449) | Open | Run page + SETUP copy |
 | Sovereign.app clean install smoke | [#450](https://github.com/moldovancsaba/mvp-factory-control/issues/450) | Open | After #448 |
 
+### 4.3 Handover checkpoint (70 PROTOCOL)
+
+*Updated **2026-03-26** — PO triggered “70” (context / session handover).*
+
+| Area | Status | Next step |
+|------|--------|-----------|
+| LLD-007–010 | Open on board ([#443](https://github.com/moldovancsaba/mvp-factory-control/issues/443)–[#446](https://github.com/moldovancsaba/mvp-factory-control/issues/446)) | PO sign-off **#443** / **#447** when AC met; engineering: pick **#448** runbook + **#449** de-hardcode paths for Mac mini story |
+| Mac mini deploy | **#448–#450** on [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1) | Implement **#448** doc + drill; then **#449**; then **#450** |
+| Umbrella OSS / install | [#432](https://github.com/moldovancsaba/mvp-factory-control/issues/432) Open | Informed by **#448–#450** completion |
+| Blockers | None recorded | — |
+
+**Repo:** [moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign) branch `main` — confirm tip with `git log -1`. See [HANDOVER.md](../HANDOVER.md) log (2026-03-26 **70 PROTOCOL** entry).
+
 ---
 
 ## 5. Change rule
