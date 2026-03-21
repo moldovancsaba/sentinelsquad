@@ -45,6 +45,9 @@ These issues are **real portfolio work** for the same product but are **not** ro
 | [#432](https://github.com/moldovancsaba/mvp-factory-control/issues/432) | Open-source repository hardening and macOS installability baseline | Packaging, install UX, and repo hygiene beyond LLD-001 scope |
 | [#433](https://github.com/moldovancsaba/mvp-factory-control/issues/433) | Memory annotation, review, and knowledge-curation workflow | Builds on LLD-006 foundation; see [HANDOVER.md](../HANDOVER.md) “Partially implemented” |
 | [#436](https://github.com/moldovancsaba/mvp-factory-control/issues/436) | Optional: circuit breaker for model backends | Operational resilience; complements LLD-010 |
+| [#448](https://github.com/moldovancsaba/mvp-factory-control/issues/448) | Mac mini / second Mac — greenfield deploy runbook (DB → app → worker → agents) | Decomposes “install on another Mac and work with agents”; supports [#432](https://github.com/moldovancsaba/mvp-factory-control/issues/432) |
+| [#449](https://github.com/moldovancsaba/mvp-factory-control/issues/449) | Operator-agnostic setup UX — no hardcoded dev paths in Run / SETUP | Makes copy-paste setup safe on any machine |
+| [#450](https://github.com/moldovancsaba/mvp-factory-control/issues/450) | macOS app + background services smoke test on clean install | After [#448](https://github.com/moldovancsaba/mvp-factory-control/issues/448); validates Sovereign.app / launchd path |
 
 ### 2.2 Repo-first shipments (board mirror for PO sign-off)
 
@@ -89,7 +92,7 @@ Use this when moving work from **idea → shipped code → board truth**.
 
 - **Live project:** [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1) — GitHub Projects **#1** on account **moldovancsaba** (portfolio board; many items are other products).
 - **Filter for `{sovereign}`:** Use the board **Product** field (or search titles) so control-plane work is not mixed with Amanoba, `{reply}`, `{hatori}`, MessMass, etc.
-- **LLD issue numbers (#437–#446):** Opened in **[moldovancsaba/mvp-factory-control](https://github.com/moldovancsaba/mvp-factory-control)** (planning repo), not in [moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign) (implementation repo). Extended `{sovereign}` issues **#432, #433, #436** — §2.1. **Repo-first PO acceptance:** **#447** (hybrid orchestrator v1) — §2.2.
+- **LLD issue numbers (#437–#446):** Opened in **[moldovancsaba/mvp-factory-control](https://github.com/moldovancsaba/mvp-factory-control)** (planning repo), not in [moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign) (implementation repo). Extended `{sovereign}` issues **#432, #433, #436, #448–#450** — §2.1. **Repo-first PO acceptance:** **#447** (hybrid orchestrator v1) — §2.2.
 - **Board vs SSOT:** §4.1 is the **planned** done/not-done view for **LLDs**. **GitHub issue state** should match §4.1 after each release (LLD-001…006 closed **2026-03-21** and match ☑; **#437** comment documents intentional legacy grep hits). **§4.2** tracks extended issues — use **Open/Closed** on GitHub as the live state and keep notes here in sync when priorities change.
 - **Copy hygiene:** Issue bodies that used the `{sentinelsquad}` placeholder were batch-updated to `{sovereign}` on **mvp-factory-control** (2026-03-21), except where the text intentionally documents legacy strings.
 
@@ -122,6 +125,9 @@ Use this to track that the plan is reflected on the board and to tick off comple
 | Memory curation | [#433](https://github.com/moldovancsaba/mvp-factory-control/issues/433) | Open | Post–LLD-006 UX and workflows |
 | Circuit breaker | [#436](https://github.com/moldovancsaba/mvp-factory-control/issues/436) | Open | Optional; tie acceptance to runtime metrics / failure modes |
 | Hybrid orchestrator v1 | [#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447) | Open | PO sign-off per issue AC; card on [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1); `npm run verify` + API smoke |
+| Mac mini greenfield runbook | [#448](https://github.com/moldovancsaba/mvp-factory-control/issues/448) | Open | Second-machine deploy + agents; drill on clean Mac |
+| Operator-agnostic paths | [#449](https://github.com/moldovancsaba/mvp-factory-control/issues/449) | Open | Run page + SETUP copy |
+| Sovereign.app clean install smoke | [#450](https://github.com/moldovancsaba/mvp-factory-control/issues/450) | Open | After #448 |
 
 ---
 

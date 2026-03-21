@@ -57,7 +57,7 @@
 ## Operator Truth
 
 - GitHub is optional for runtime.
-- **Delivery planning SSOT:** [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) — LLDs **#437–#446**, extended `{sovereign}` **#432, #433, #436**, hybrid PO acceptance **[#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447)**; **§3.2** end-to-end delivery steps. **Implementation SSOT:** this repo (`main`).
+- **Delivery planning SSOT:** [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) — LLDs **#437–#446**, extended `{sovereign}` **#432, #433, #436**, **Mac mini / second-machine deploy [#448](https://github.com/moldovancsaba/mvp-factory-control/issues/448)–[#450](https://github.com/moldovancsaba/mvp-factory-control/issues/450)**, hybrid PO **[#447](https://github.com/moldovancsaba/mvp-factory-control/issues/447)**; **§3.2** end-to-end delivery steps. **Implementation SSOT:** this repo (`main`).
 - This repository is the implementation and documentation source for the product.
 
 ---
@@ -98,6 +98,7 @@ npm run wiki:ingest-batch -- --project-session-id=<cuid> --batch-limit=25
 
 Each entry below is appended per READMEDEV rule 13. Format: timestamp + agent label, branch/commit, objective, what changed, files touched, validation, known issues/next actions.
 
+- **2026-03-25 (local)** — **Board: Mac mini deploy track:** Opened [mvp-factory-control#448](https://github.com/moldovancsaba/mvp-factory-control/issues/448)–[#450](https://github.com/moldovancsaba/mvp-factory-control/issues/450) (greenfield runbook, operator-agnostic paths, Sovereign.app smoke); added to **MVP Factory Board**; [#432](https://github.com/moldovancsaba/mvp-factory-control/issues/432) comment. SSOT §2.1 / §4.2 + WIKI + HANDOVER operator truth.
 - **2026-03-24 (local)** — **LLD-007 Outline + batch ingest:** [wiki-outline.js](apps/sovereign/scripts/lib/wiki-outline.js), [wiki-adapter.js](apps/sovereign/scripts/lib/wiki-adapter.js); MCP `doc://wiki/outline/doc/{uuid}`; `wiki:ingest-batch` + dedupe by `sourceUrl`; `.env.example` + [WIKI_SELF_HOSTED.md](docs/setup/WIKI_SELF_HOSTED.md). **Validation:** `npm run verify`.
 - **2026-03-24 (local)** — **LLD-007 BookStack bridge + ingest:** [apps/sovereign/scripts/lib/wiki-bookstack.js](apps/sovereign/scripts/lib/wiki-bookstack.js) (REST list/read + public URL); [mcp-docs-server.js](apps/sovereign/scripts/mcp-docs-server.js) `doc://wiki/bookstack/page/{id}`; [ingest-wiki-to-memory.js](apps/sovereign/scripts/ingest-wiki-to-memory.js) + `wiki:ingest-page`; `.env.example` + [WIKI_SELF_HOSTED.md](docs/setup/WIKI_SELF_HOSTED.md) + Master Plan note. **Validation:** `npm run verify`.
 - **2026-03-24 (local)** — **LLD-007 slice (MCP docs + wiki deploy doc):** Added `npm run mcp:docs` ([apps/sovereign/scripts/mcp-docs-server.js](apps/sovereign/scripts/mcp-docs-server.js)) with `doc://runbooks/getting-started` and `doc://project/ssot-board`; [docs/runbooks/getting-started.md](docs/runbooks/getting-started.md); [docker-compose.wiki.yml](docker-compose.wiki.yml) + [docs/setup/WIKI_SELF_HOSTED.md](docs/setup/WIKI_SELF_HOSTED.md); Run page flow; root `verify` runs [e2e:mcp-docs](apps/sovereign/scripts/e2e/sovereign-mcp-docs.e2e.js). **Validation:** `npm run verify`.
