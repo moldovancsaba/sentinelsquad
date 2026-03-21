@@ -55,7 +55,7 @@
 ## Operator Truth
 
 - GitHub is optional for runtime.
-- The **mvp-factory-control** project board is the SSOT for delivery planning; canonical LLD issues are **#437–#446** (see [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md)).
+- **Delivery planning SSOT:** [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) — LLDs **#437–#446**, extended `{sovereign}` issues **#432, #433, #436**, and **§3.2** end-to-end delivery steps. **Implementation SSOT:** this repo (`main`).
 - This repository is the implementation and documentation source for the product.
 
 ---
@@ -82,9 +82,10 @@ node scripts/mcp-backlog-server.js   # then send one JSON-RPC line to stdin, e.g
 
 ## Next Priority
 
-1. **LLD-007** (wiki/docs + MCP resources), **LLD-008** (self-improvement policy), **LLD-009** (Theia panels), **LLD-010** (provider abstraction) — per [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) §2. Optional: close **mvp-factory-control** [#437](https://github.com/moldovancsaba/mvp-factory-control/issues/437) after PO grep/sign-off on LLD-001.
-2. ~~Implement and automate daily sub-tasks~~ Done: see **Run** (/run). Otherwise: in the application (e.g. “How to run the MCP server” and similar operator flows).
-3. Keep docs and board in sync with implemented state.
+1. **Next LLDs:** **LLD-007**–**LLD-010** — per [docs/SOVEREIGN_PROJECT_BOARD_SSOT.md](docs/SOVEREIGN_PROJECT_BOARD_SSOT.md) §2 and §4.1 ([#443](https://github.com/moldovancsaba/mvp-factory-control/issues/443)–[#446](https://github.com/moldovancsaba/mvp-factory-control/issues/446)).
+2. **Board + repo alignment:** Create a **mvp-factory-control** issue for **hybrid orchestrator v1** (link spec + AC), add to the board, then update SSOT §2.2 / §4.2 — see SSOT **§3.2**. Extended backlog **#432, #433, #436** are listed in SSOT **§2.1**.
+3. ~~Implement and automate daily sub-tasks~~ Done: see **Run** (/run). Otherwise: in the application (e.g. “How to run the MCP server” and similar operator flows).
+4. After each merge to `main`: HANDOVER log (**70 PROTOCOL**) + SSOT checklist if an LLD or extended item progressed.
 
 ---
 

@@ -12,7 +12,7 @@ This is the navigation hub for `{sovereign}` documentation.
 
 - [SOVEREIGN_AGENT_TEAM_CONTRACT.md](SOVEREIGN_AGENT_TEAM_CONTRACT.md) — unbreakable contract between PO and Agent Team
 - [SOVEREIGN_MASTER_PLAN_AND_LLD.md](SOVEREIGN_MASTER_PLAN_AND_LLD.md) — what to do, when, LLD issues for mvp-factory-control
-- [SOVEREIGN_PROJECT_BOARD_SSOT.md](SOVEREIGN_PROJECT_BOARD_SSOT.md) — **SSOT for the project board**: canonical deliverables, order, mapping to mvp-factory-control, delivery checklist
+- [SOVEREIGN_PROJECT_BOARD_SSOT.md](SOVEREIGN_PROJECT_BOARD_SSOT.md) — **SSOT for delivery + board**: LLDs (#437–#446), extended issues (#432, #433, #436), repo-first shipments (e.g. hybrid v1), **§3.2** how to deliver, **§3.3** reconciling drift
 - [SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md](SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md) — ready-to-paste issue title + body for each LLD (mvp-factory-control)
 - [SOVEREIGN_DELIVERY_PLAYBOOK.md](SOVEREIGN_DELIVERY_PLAYBOOK.md) — one-page delivery rhythm: phases, sprint steps, when to update which doc
 - [RENAME_TO_SOVEREIGN.md](RENAME_TO_SOVEREIGN.md) — product rename checklist (sentinelsquad → sovereign)

@@ -11,15 +11,15 @@
 | What is law (invariants, obligations)? | [SOVEREIGN_AGENT_TEAM_CONTRACT.md](SOVEREIGN_AGENT_TEAM_CONTRACT.md) |
 | What do we do, in what order, and what are the deliverables? | [SOVEREIGN_MASTER_PLAN_AND_LLD.md](SOVEREIGN_MASTER_PLAN_AND_LLD.md) |
 | How does the product board (backlog) work — pipeline, triage, time language? | [PRODUCT_BOARD_AND_TRIAGE.md](PRODUCT_BOARD_AND_TRIAGE.md) |
-| What is on the project board (issues to build or update)? | **This document** (§2 and §3). |
+| What is on the project board (issues to build or update)? | **This document** — LLDs in §2, extended `{sovereign}` issues in §2.1, repo-first shipments in §2.2, and how to deliver in §3.2–3.3. |
 
-When in doubt: **Contract → Master Plan → Product Board doc → this SSOT.** Scope and acceptance for each deliverable are defined in the Master Plan (Part C); this doc only summarises and orders them.
+When in doubt: **Contract → Master Plan → Product Board doc → this SSOT.** Scope and acceptance for each **numbered LLD** are defined in the Master Plan (Part C). **Extended backlog** issues (§2.1) carry acceptance in their GitHub bodies until promoted to an LLD via the contract process.
 
 ---
 
 ## 2. Canonical deliverable set (LLD issues)
 
-The following are the **only** LLD deliverables in the current plan. Each row is one issue to create or update on the project board.
+The following are the **only LLD-numbered** deliverables in the [Master Plan](SOVEREIGN_MASTER_PLAN_AND_LLD.md) (Part C). Each row maps to **one primary issue** on **mvp-factory-control** (see §4.1). **Other `{sovereign}` planning issues** live in §2.1; **code shipped before a board issue exists** is listed in §2.2.
 
 | Id | One-line objective | Depends on | Suggested phase |
 |----|---------------------|------------|------------------|
@@ -36,6 +36,24 @@ The following are the **only** LLD deliverables in the current plan. Each row is
 
 **Implementation order (first slice):** 001 → 002 → 003. Then 004, 005, 006 in parallel where possible; 007 after 006; 008, 009, 010 as capacity allows. Full dependency graph: [Master Plan Part D](SOVEREIGN_MASTER_PLAN_AND_LLD.md#part-d-dependency-graph-for-ordering).
 
+### 2.1 Extended `{sovereign}` backlog (mvp-factory-control, not LLD-numbered)
+
+These issues are **real portfolio work** for the same product but are **not** rows in §2. If they are missing here, the SSOT and the board have drifted — **add a row** when a new issue is opened, or promote the scope to a formal LLD (contract + Master Plan + §2).
+
+| Issue | Objective | Relation to LLDs / notes |
+|-------|-----------|---------------------------|
+| [#432](https://github.com/moldovancsaba/mvp-factory-control/issues/432) | Open-source repository hardening and macOS installability baseline | Packaging, install UX, and repo hygiene beyond LLD-001 scope |
+| [#433](https://github.com/moldovancsaba/mvp-factory-control/issues/433) | Memory annotation, review, and knowledge-curation workflow | Builds on LLD-006 foundation; see [HANDOVER.md](../HANDOVER.md) “Partially implemented” |
+| [#436](https://github.com/moldovancsaba/mvp-factory-control/issues/436) | Optional: circuit breaker for model backends | Operational resilience; complements LLD-010 |
+
+### 2.2 Repo-first shipments pending a board mirror
+
+Work **merged to [sovereign](https://github.com/moldovancsaba/sovereign) `main`** that does **not** yet have a dedicated **mvp-factory-control** issue (or Projects card) for PO acceptance. **Action:** Product Owner opens an issue using the [generic template](SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md#generic-template-if-you-need-a-new-lld-later), links this SSOT row + spec, defines AC, adds the card to the [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1), then pastes the issue link **in the table below** (replace “TBD”).
+
+| Shipment | Spec / entrypoints | Board issue |
+|----------|-------------------|-------------|
+| **Hybrid orchestrator v1** | [HYBRID_ORCHESTRATOR_SPEC_V1.md](architecture/HYBRID_ORCHESTRATOR_SPEC_V1.md); `apps/sovereign/src/lib/hybrid-orchestrator/`; `POST /api/orchestrator/hybrid` | **TBD** — create + link |
+
 ---
 
 ## 3. Mapping to the project board (mvp-factory-control)
@@ -47,12 +65,32 @@ The following are the **only** LLD deliverables in the current plan. Each row is
 - **Status / pipeline:** Use your board columns as you prefer; align item semantics (IDEABANK, READY, IN_PROGRESS, DONE, CRITICAL) with [PRODUCT_BOARD_AND_TRIAGE.md](PRODUCT_BOARD_AND_TRIAGE.md). Use time language "now / sooner / later" in titles or goals, not Q4/H2/Y27.
 - **Delivery rhythm:** See **[SOVEREIGN_DELIVERY_PLAYBOOK.md](SOVEREIGN_DELIVERY_PLAYBOOK.md)** for sprint/cycle steps and when to update this SSOT.
 
+### 3.2 End-to-end delivery (what to do, in order)
+
+Use this when moving work from **idea → shipped code → board truth**.
+
+1. **Pick the track:** Next **LLD** from §2 / §4.1 (open rows), **extended** item from §2.1 / §4.2, or **close a gap** in §2.2 (create the board issue, then define AC).
+2. **Plan on the board:** Ensure an issue exists on **mvp-factory-control** and (if you use it) a card on [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1). Issue body should link **this SSOT** and, for LLDs, **[Master Plan Part C](SOVEREIGN_MASTER_PLAN_AND_LLD.md#part-c-deliverable-issues-lld)** or the [issue template](SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md) paste.
+3. **Implement** in **[moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign):** branch from `main`, merge via PR or direct push per your practice, run **`npm run verify`** (or validation named in the issue / Master Plan).
+4. **Handover:** Append **[HANDOVER.md](../HANDOVER.md)** handover log (READMEDEV **70 PROTOCOL**); update **Implemented Now** / **Partially Implemented** if user-visible behaviour changed.
+5. **Sync SSOT:** Tick **§4.1** for the LLD when PO accepts; update **§4.2** notes for extended issues; for §2.2 rows, **replace TBD** with the new issue link when created.
+6. **Close the loop on GitHub:** Close the **mvp-factory-control** issue (or comment engineering vs PO AC); align the **Projects** column with reality.
+
+### 3.3 When the board, SSOT, and repo disagree
+
+| Situation | What to treat as source of truth | Fix |
+|-----------|-----------------------------------|-----|
+| Issue closed but §4.1 still ☐ | SSOT should follow accepted work | Tick §4.1; ensure HANDOVER matches |
+| §4.1 ☑ but issue still open | Usually issue should close | Close issue or reopen §4.1 with comment |
+| Code on `main` not on board | §2.2 | Create issue + link; then PO sign-off |
+| Open board issue not listed in §2.1 | SSOT incomplete | Add §2.1 + §4.2 row |
+
 ### 3.1 MVP Factory Board (GitHub Projects)
 
 - **Live project:** [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1) — GitHub Projects **#1** on account **moldovancsaba** (portfolio board; many items are other products).
 - **Filter for `{sovereign}`:** Use the board **Product** field (or search titles) so control-plane work is not mixed with Amanoba, `{reply}`, `{hatori}`, MessMass, etc.
-- **LLD issue numbers (#437–#446):** Opened in **[moldovancsaba/mvp-factory-control](https://github.com/moldovancsaba/mvp-factory-control)** (planning repo), not in [moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign) (implementation repo).
-- **Board vs SSOT:** This document’s §4 checklist is the **contractual** done/not-done view for LLDs. **GitHub issue state** for LLD-001…006 ([#437](https://github.com/moldovancsaba/mvp-factory-control/issues/437)–[#442](https://github.com/moldovancsaba/mvp-factory-control/issues/442)) was aligned with §4 (issues closed **2026-03-21**; **#437** closed with engineering sign-off—see issue comment for intentional legacy grep hits).
+- **LLD issue numbers (#437–#446):** Opened in **[moldovancsaba/mvp-factory-control](https://github.com/moldovancsaba/mvp-factory-control)** (planning repo), not in [moldovancsaba/sovereign](https://github.com/moldovancsaba/sovereign) (implementation repo). Extended `{sovereign}` issues **#432, #433, #436** are also planning-only; see §2.1.
+- **Board vs SSOT:** §4.1 is the **planned** done/not-done view for **LLDs**. **GitHub issue state** should match §4.1 after each release (LLD-001…006 closed **2026-03-21** and match ☑; **#437** comment documents intentional legacy grep hits). **§4.2** tracks extended issues — use **Open/Closed** on GitHub as the live state and keep notes here in sync when priorities change.
 - **Copy hygiene:** Issue bodies that used the `{sentinelsquad}` placeholder were batch-updated to `{sovereign}` on **mvp-factory-control** (2026-03-21), except where the text intentionally documents legacy strings.
 
 ---
@@ -60,6 +98,8 @@ The following are the **only** LLD deliverables in the current plan. Each row is
 ## 4. Delivery checklist (PO use)
 
 Use this to track that the plan is reflected on the board and to tick off completion. Updates to the plan (new LLD, reorder) require contract consensus and must be reflected here and in the Master Plan.
+
+### 4.1 LLDs (Master Plan §2)
 
 | LLD | Issue(s) on board | Done |
 |-----|-------------------|------|
@@ -74,11 +114,21 @@ Use this to track that the plan is reflected on the board and to tick off comple
 | LLD-009 | [#445](https://github.com/moldovancsaba/mvp-factory-control/issues/445) | ☐ |
 | LLD-010 | [#446](https://github.com/moldovancsaba/mvp-factory-control/issues/446) | ☐ |
 
+### 4.2 Extended backlog, repo-first shipments, and PO sign-off
+
+| Item | Issue / link | GitHub state (2026-03) | PO / AC notes |
+|------|----------------|-------------------------|---------------|
+| OSS hardening | [#432](https://github.com/moldovancsaba/mvp-factory-control/issues/432) | Open | Align with [HANDOVER.md](../HANDOVER.md) “first-public OSS packaging polish” |
+| Memory curation | [#433](https://github.com/moldovancsaba/mvp-factory-control/issues/433) | Open | Post–LLD-006 UX and workflows |
+| Circuit breaker | [#436](https://github.com/moldovancsaba/mvp-factory-control/issues/436) | Open | Optional; tie acceptance to runtime metrics / failure modes |
+| Hybrid orchestrator v1 | §2.2 (**TBD**) | Code on `main`; issue **not** created yet | Create issue; reference spec + `npm run verify`; define API/integration AC |
+
 ---
 
 ## 5. Change rule
 
 - **Adding or removing a deliverable** (new LLD or dropping one): Change the [Master Plan](SOVEREIGN_MASTER_PLAN_AND_LLD.md) and this SSOT via the [contract change process](SOVEREIGN_AGENT_TEAM_CONTRACT.md#43-change-process-for-this-contract); then update the project board.
+- **New `{sovereign}` issue on mvp-factory-control** that is **not** a new LLD: Add a row to **§2.1** and **§4.2** (and optionally the [MVP Factory Board](https://github.com/users/moldovancsaba/projects/1)). No Master Plan change unless you later promote it to an LLD.
 - **Reordering or reprioritising:** Update §2 and Part D of the Master Plan; no contract change needed unless invariants or obligations change.
 - **Clarifying acceptance or tests:** Update the Master Plan Part C for that LLD; optionally note in this doc if the checklist or mapping changes.
 

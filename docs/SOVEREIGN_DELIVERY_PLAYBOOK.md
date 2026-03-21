@@ -2,6 +2,8 @@
 
 **Purpose:** How to run delivery against the plan with a clear SSOT and fine-tuned rhythm. Use with [SOVEREIGN_PROJECT_BOARD_SSOT.md](SOVEREIGN_PROJECT_BOARD_SSOT.md) and [SOVEREIGN_MASTER_PLAN_AND_LLD.md](SOVEREIGN_MASTER_PLAN_AND_LLD.md).
 
+**End-to-end steps (repo + board + docs):** [SOVEREIGN_PROJECT_BOARD_SSOT.md](SOVEREIGN_PROJECT_BOARD_SSOT.md) §3.2. **When SSOT and GitHub disagree:** SSOT §3.3.
+
 ---
 
 ## 1. Phases and order
@@ -19,7 +21,7 @@
 
 ## 2. Sprint / cycle rhythm
 
-1. **Start of cycle:** From [SOVEREIGN_PROJECT_BOARD_SSOT.md](SOVEREIGN_PROJECT_BOARD_SSOT.md) §2, pick the next LLD(s) by phase and dependency (e.g. Phase 1 done → pick from Phase 2).
+1. **Start of cycle:** From [SOVEREIGN_PROJECT_BOARD_SSOT.md](SOVEREIGN_PROJECT_BOARD_SSOT.md) §2 (LLDs) and §2.1 (extended issues), pick the next item by phase and dependency (e.g. Phase 1 done → pick from Phase 2 or an open extended issue).
 2. **Ensure issue exists on board:** If the LLD is not yet on mvp-factory-control, create it from [SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md](SOVEREIGN_ISSUE_TEMPLATE_MVP_FACTORY_CONTROL.md) (copy title + body for that LLD). Add labels (`{sovereign}`, P0/P1/P2) and set "Depends on" per SSOT.
 3. **Update SSOT checklist:** In SSOT §4, fill "Issue(s) on board" (e.g. link or issue number) for that LLD.
 4. **Execute:** Work the issue; validate per the LLD table (test cases, edge cases, validation commands).
