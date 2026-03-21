@@ -10,8 +10,6 @@ import { retrieveProjectMemory } from "@/lib/memory";
 
 export const dynamic = "force-dynamic";
 
-export const dynamic = "force-dynamic";
-
 export default async function IdePage() {
   const session = await requireSession();
   if (!session) redirect("/signin");

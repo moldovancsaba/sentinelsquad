@@ -14,8 +14,6 @@ import {
   listRunningWorkers
 } from "@/lib/worker-process";
 
-export const dynamic = "force-dynamic";
-
 import {
   createAgentAction,
   adminOverrideManualRequiredAction,
