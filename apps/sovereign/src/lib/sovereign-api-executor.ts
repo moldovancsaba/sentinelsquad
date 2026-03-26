@@ -36,7 +36,7 @@ export type SovereignChatCompletionsRequest = {
 export type SovereignExecutionSuccess = {
   id: string;
   mode: SovereignApiMode;
-  provider: "ollama" | "openai-compatible";
+  provider: "ollama" | "openai-compatible" | "mock";
   model: string;
   outputText: string;
   finishReason: string;

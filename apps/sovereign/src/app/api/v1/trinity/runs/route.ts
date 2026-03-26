@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
     conditions.push(Prisma.sql`"createdAt" <= ${d}`);
   }
 
-  const whereClause = Prisma.sql`WHERE ${Prisma.join(conditions, Prisma.sql` AND `)}`;
+  const whereClause = Prisma.sql`WHERE ${Prisma.join(conditions, " AND ")}`;
 
   const totalRows = await prisma.$queryRaw<Array<{ count: bigint | number }>>(
     Prisma.sql`
