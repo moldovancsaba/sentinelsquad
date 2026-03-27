@@ -140,6 +140,14 @@ cd /Users/moldovancsaba/Projects/sovereign/apps/sovereign
 npm run e2e:api-v1-trinity
 ```
 
+Current e2e reliability coverage includes:
+
+- accepted trinity path + persisted run audit readback
+- clarification-required branch (`CLARIFICATION_REQUIRED_DRAFTER`)
+- retry-budget exhausted branch (`RETRY_BUDGET_EXHAUSTED`)
+- stage-trace integrity assertions on failure branches
+- conservative latency budgets for deterministic mock direct/trinity calls
+
 Response shape:
 
 - standard:
