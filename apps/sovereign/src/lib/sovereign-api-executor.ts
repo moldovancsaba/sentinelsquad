@@ -373,12 +373,28 @@ async function runProviderCompletion(
 
   if (resolved.provider === "mock") {
     const finalPrompt = normalizeText(messages[messages.length - 1]?.content || "");
-    const isTrinityStage =
-      /You are the Drafter in a Trinity pipeline/i.test(finalPrompt) ||
-      /You are the Writer in a Trinity pipeline/i.test(finalPrompt) ||
-      /You are the Judge in a Trinity pipeline/i.test(finalPrompt);
+    const isDrafterStage = /You are the Drafter in a Trinity pipeline/i.test(finalPrompt);
+    const isWriterStage = /You are the Writer in a Trinity pipeline/i.test(finalPrompt);
+    const isJudgeStage = /You are the Judge in a Trinity pipeline/i.test(finalPrompt);
+    const isTrinityStage = isDrafterStage || isWriterStage || isJudgeStage;
+    const forceDrafterClarification = /force_drafter_clarification/i.test(finalPrompt);
+    const forceRetryBudgetExhausted = /force_retry_budget_exhausted/i.test(finalPrompt);
     if (isTrinityStage) {
-      if (/Drafter/i.test(finalPrompt)) {
+      if (isDrafterStage) {
+        if (forceDrafterClarification) {
+          return {
+            provider: "mock",
+            model: resolved.model,
+            outputText: JSON.stringify({
+              status: "needs_clarification",
+              confidence: 0.42,
+              reasonClass: "clarity",
+              askBack: true,
+              content: "Clarification required by forced mock path."
+            }),
+            finishReason: "stop"
+          };
+        }
         return {
           provider: "mock",
           model: resolved.model,
@@ -392,7 +408,7 @@ async function runProviderCompletion(
           finishReason: "stop"
         };
       }
-      if (/Writer/i.test(finalPrompt)) {
+      if (isWriterStage) {
         return {
           provider: "mock",
           model: resolved.model,
@@ -402,6 +418,20 @@ async function runProviderCompletion(
             reasonClass: "implementation",
             askBack: false,
             content: "Mock writer output: task completed."
+          }),
+          finishReason: "stop"
+        };
+      }
+      if (isJudgeStage && forceRetryBudgetExhausted) {
+        return {
+          provider: "mock",
+          model: resolved.model,
+          outputText: JSON.stringify({
+            status: "revised",
+            confidence: 0.3,
+            reasonClass: "quality",
+            askBack: false,
+            content: "Forced retry path: judge rejects this attempt."
           }),
           finishReason: "stop"
         };

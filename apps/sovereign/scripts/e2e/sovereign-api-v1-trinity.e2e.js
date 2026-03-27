@@ -179,6 +179,7 @@ async function stageGroupApis(baseUrl, headers) {
 }
 
 async function stageDirectSuccess(baseUrl, headers) {
+  const startedAt = Date.now();
   const direct = await requestJson(`${baseUrl}/api/v1/chat/completions`, {
     method: "POST",
     headers: { ...headers, "Content-Type": "application/json" },
@@ -194,9 +195,13 @@ async function stageDirectSuccess(baseUrl, headers) {
   );
   assert(direct.json?.choices?.[0]?.message?.content, "direct chat must return assistant content");
   assert(direct.json?.sovereign?.provider === "mock", "direct chat must report mock provider");
+  const latencyMs = Date.now() - startedAt;
+  assert(latencyMs < 5000, `direct chat latency expected <5000ms, got ${latencyMs}ms`);
+  return { latencyMs };
 }
 
 async function stageTrinitySuccess(baseUrl, headers) {
+  const startedAt = Date.now();
   const trinity = await requestJson(`${baseUrl}/api/v1/chat/completions`, {
     method: "POST",
     headers: { ...headers, "Content-Type": "application/json" },
@@ -216,7 +221,9 @@ async function stageTrinitySuccess(baseUrl, headers) {
     trinity.json?.sovereign?.metadata?.trinityStatus === "ACCEPTED",
     "trinity chat must report ACCEPTED status in metadata"
   );
-  return trinity.json;
+  const latencyMs = Date.now() - startedAt;
+  assert(latencyMs < 8000, `trinity chat latency expected <8000ms, got ${latencyMs}ms`);
+  return { payload: trinity.json, latencyMs };
 }
 
 async function stageTrinityRunAudit(baseUrl, headers, groupKey) {
@@ -288,6 +295,71 @@ async function stageTeamPolicy(baseUrl, headers, groupKey) {
   );
 }
 
+async function stageClarificationRequired(baseUrl, headers) {
+  const clarify = await requestJson(`${baseUrl}/api/v1/chat/completions`, {
+    method: "POST",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mode: "trinity",
+      provider: "mock",
+      team: { strategy: "manual" },
+      messages: [{ role: "user", content: "force_drafter_clarification for reliability test" }]
+    })
+  });
+  assert(clarify.res.status === 200, `clarification call expected 200, got ${clarify.res.status}: ${clarify.text}`);
+  assert(
+    clarify.json?.sovereign?.metadata?.trinityStatus === "CLARIFICATION_REQUIRED",
+    "clarification call must return CLARIFICATION_REQUIRED"
+  );
+  assert(
+    clarify.json?.sovereign?.metadata?.stage === "drafter",
+    "clarification call must indicate drafter stage"
+  );
+  const runId = clarify.json?.sovereign?.metadata?.runId;
+  assert(runId && typeof runId === "string", "clarification call must return metadata.runId");
+
+  const run = await requestJson(`${baseUrl}/api/v1/trinity/runs/${encodeURIComponent(runId)}`, {
+    method: "GET",
+    headers
+  });
+  assert(run.res.status === 200, `clarification run read expected 200, got ${run.res.status}: ${run.text}`);
+  assert(run.json?.status === "CLARIFICATION_REQUIRED_DRAFTER", "clarification run must persist drafter status");
+  assert(Array.isArray(run.json?.stage_trace), "clarification run must include stage_trace");
+}
+
+async function stageRetryBudgetExhausted(baseUrl, headers) {
+  const retry = await requestJson(`${baseUrl}/api/v1/chat/completions`, {
+    method: "POST",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mode: "trinity",
+      provider: "mock",
+      team: { strategy: "manual" },
+      messages: [{ role: "user", content: "force_retry_budget_exhausted for reliability test" }]
+    })
+  });
+  assert(retry.res.status === 200, `retry call expected 200, got ${retry.res.status}: ${retry.text}`);
+  assert(
+    retry.json?.sovereign?.metadata?.trinityStatus === "RETRY_BUDGET_EXHAUSTED",
+    "retry call must return RETRY_BUDGET_EXHAUSTED"
+  );
+  const runId = retry.json?.sovereign?.metadata?.runId;
+  assert(runId && typeof runId === "string", "retry call must return metadata.runId");
+
+  const run = await requestJson(`${baseUrl}/api/v1/trinity/runs/${encodeURIComponent(runId)}`, {
+    method: "GET",
+    headers
+  });
+  assert(run.res.status === 200, `retry run read expected 200, got ${run.res.status}: ${run.text}`);
+  assert(run.json?.status === "RETRY_BUDGET_EXHAUSTED", "retry run must persist exhausted status");
+  assert(run.json?.attempts === 5, `retry run attempts expected 5, got ${run.json?.attempts}`);
+  assert(Array.isArray(run.json?.stage_trace), "retry run must include stage_trace");
+  assert(
+    run.json?.stage_trace?.length >= 15,
+    `retry run stage_trace expected >=15 entries, got ${run.json?.stage_trace?.length}`
+  );
+}
+
 async function main() {
   const startedAt = Date.now();
   const baseUrl = process.env.SOVEREIGN_E2E_BASE_URL || "http://127.0.0.1:3007";
@@ -316,13 +388,14 @@ async function main() {
   await stageReadEndpoints(baseUrl, headers);
   summary.stages.readEndpoints = { passed: true };
 
-  await stageDirectSuccess(baseUrl, headers);
-  summary.stages.directSuccess = { passed: true };
+  const direct = await stageDirectSuccess(baseUrl, headers);
+  summary.stages.directSuccess = { passed: true, latencyMs: direct.latencyMs };
 
   const trinitySuccess = await stageTrinitySuccess(baseUrl, headers);
   summary.stages.trinitySuccess = {
     passed: true,
-    runId: trinitySuccess?.sovereign?.metadata?.runId || null
+    runId: trinitySuccess?.payload?.sovereign?.metadata?.runId || null,
+    latencyMs: trinitySuccess.latencyMs
   };
 
   const groups = await stageGroupApis(baseUrl, headers);
@@ -333,6 +406,12 @@ async function main() {
 
   await stageTeamPolicy(baseUrl, headers, groups.groupAKey);
   summary.stages.teamPolicy = { passed: true };
+
+  await stageClarificationRequired(baseUrl, headers);
+  summary.stages.clarificationRequired = { passed: true };
+
+  await stageRetryBudgetExhausted(baseUrl, headers);
+  summary.stages.retryBudgetExhausted = { passed: true };
 
   summary.durationMs = Date.now() - startedAt;
   console.log(JSON.stringify(summary, null, 2));
