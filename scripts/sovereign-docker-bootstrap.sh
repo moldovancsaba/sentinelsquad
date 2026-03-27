@@ -111,6 +111,36 @@ reclaim_port "$DB_PORT" "SOVEREIGN_DB_PORT"
 reclaim_port "$APP_PORT" "SOVEREIGN_APP_PORT"
 echo
 
+# GitHub Actions and some dev machines cache invalid Docker Hub credentials; anonymous
+# pulls of public images then fail with "unauthorized: incorrect username or password".
+echo "[STEP] Docker Hub auth sanity (best-effort)"
+docker logout docker.io >/dev/null 2>&1 || true
+echo "[PASS] Cleared docker.io login state (if any)"
+
+pull_sovereign_db_with_retry() {
+  local attempt=1
+  local max=5
+  local delay=8
+  while [ "$attempt" -le "$max" ]; do
+    if dc pull sovereign-db; then
+      echo "[PASS] Pulled sovereign-db image (attempt ${attempt})"
+      return 0
+    fi
+    echo "[WARN] docker compose pull sovereign-db failed (attempt ${attempt}/${max}); retrying in ${delay}s..."
+    sleep "$delay"
+    attempt=$((attempt + 1))
+    delay=$((delay + 4))
+  done
+  return 1
+}
+
+echo "[STEP] Pulling database image (with retries for Docker Hub rate limits)"
+if ! pull_sovereign_db_with_retry; then
+  echo "[FAIL] Could not pull database image after retries."
+  echo "Remediation: ensure Docker Hub is reachable; for CI, set DOCKERHUB_USERNAME and DOCKERHUB_TOKEN repository secrets, or retry later."
+  exit 1
+fi
+
 echo "[STEP] Starting database service"
 dc up -d sovereign-db
 wait_for_health "sovereign-db" "$HEALTH_TIMEOUT_SECONDS"

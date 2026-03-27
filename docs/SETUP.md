@@ -88,6 +88,8 @@ npm run prisma:migrate:deploy
 
 **Docker stack** (app + DB): `./scripts/sovereign-docker-bootstrap.sh` already runs `prisma migrate deploy` inside the app container after the DB is healthy.
 
+**CI / Docker Hub:** GitHub Actions portability jobs pull `pgvector/pgvector:pg16` from Docker Hub. If pulls fail with `unauthorized` or rate limits, the workflow clears cached `docker.io` logins and retries. Repository maintainers may add optional secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` for authenticated pulls.
+
 ### 5. Ensure Ollama is available
 
 At minimum:
