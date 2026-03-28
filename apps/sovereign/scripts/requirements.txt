@@ -1,0 +1,9 @@
+requests
+python-dotenv
+instructor
+openai
+pydantic>=2.0.0
+pydantic-settings
+psycopg2-binary
+rich
+typing-extensions
